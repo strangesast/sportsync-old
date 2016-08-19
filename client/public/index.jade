@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+
+    if test
+      link(href='/components/mocha/mocha.css', rel='stylesheet')
+
+    link(rel='stylesheet', href='/style.css')
+
+  body
+    div
+      | Sportsync client page
+
+    script(src='/index.js')
+
+    if test
+      script(src='/components/expect.js/index.js')
+      script(src='/components/mocha/mocha.js')
+
+      script().
+        mocha.setup('bdd')
+
+      script().
+        document.addEventListener('DOMContentLoaded', function(e) {
+          mocha.checkLeaks();
+          mocha.run();
+        });
