@@ -11,6 +11,7 @@
     "debug": "~2.2.0",
     "expect.js": "^0.3.1",
     "express": "~4.13.4",
+    "http": "0.0.0",
     "jade": "~1.11.0",
     "less-middleware": "1.0.x",
     "mocha": "^3.0.2",
@@ -18,6 +19,7 @@
     "morgan": "~1.7.0",
     "passport": "^0.3.2",
     "serve-favicon": "~2.3.0",
+    "socket.io": "^1.4.8",
     "ws": "^1.1.1"
   }
 }

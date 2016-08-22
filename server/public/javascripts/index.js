@@ -150,3 +150,38 @@ players.getAllOtherTeams = function(m) {
   var playerListView = new ElementCollectionView({collection: players, el: '#player-list', name: 'player'});
 });
 
+
+
+//TEST FUNCTIONS
+if (!String.format) {
+  String.format = function(format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined' ? args[number] : match
+      ;
+    });
+  };
+}
+
+function loadBoard (){
+  var parser = document.createElement('a');
+  parser.href = document.baseURI;
+  var api_page = String.format ("http://{0}:{1}/api/loadboard", parser.hostname, parser.port);
+  var command_data = {board_name: 'board4'};
+  
+  var Httpreq = new XMLHttpRequest(); // a new request
+  Httpreq.onreadystatechange = function() {
+   if (Httpreq.readyState == 4) {
+    var text = Httpreq.responseText;
+ //   if (text) {
+ //       var response = JSON.parse (text);
+ //   }
+   }
+  };
+  //last argument is true for asynchronous
+  Httpreq.open("POST",api_page,true);
+  Httpreq.setRequestHeader("Content-Type", "application/json");
+  var tmp = JSON.stringify(command_data);
+  Httpreq.send(tmp);         
+ 
+}
