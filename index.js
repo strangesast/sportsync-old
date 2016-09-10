@@ -249,7 +249,7 @@ var router = new Router();
 
 var gameModel = gameCollection.create({
   name: 'Test game'
-}, {wait: true});
+});
 
 var gameView = new GameView({model: gameModel});
 gameView.render();
@@ -260,11 +260,11 @@ window.addEventListener('scroll', function(e) {
   if(scrollY > 20) {
     document.querySelector('.score-box').classList.add('min');
     document.querySelector('.time-box').classList.add('min');
-    document.querySelector('.transactions-box').classList.add('min');
+    document.querySelector('.boxes').classList.add('min');
   } else {
     document.querySelector('.score-box').classList.remove('min');
     document.querySelector('.time-box').classList.remove('min');
-    document.querySelector('.transactions-box').classList.remove('min');
+    document.querySelector('.boxes').classList.remove('min');
   }
 });
 
