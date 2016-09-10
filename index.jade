@@ -3,8 +3,10 @@ html
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0')
 
+    // Origin Trial Token, feature = Web Bluetooth, origin = https://sportsynclive.com, expires = 2016-10-10
+    meta(http-equiv='origin-trial', content='AhamtQGntIsEA27MiUelve8/Uee+UaRjFYvstwpEKVXnNTNOlr5oBA1hBxNkTdgyJkU0AAa/aG4u4l1wDGBp6QwAAABceyJvcmlnaW4iOiAiaHR0cHM6Ly9zcG9ydHN5bmNsaXZlLmNvbTo0NDMiLCAiZmVhdHVyZSI6ICJXZWJCbHVldG9vdGgiLCAiZXhwaXJ5IjogMTQ3NjEwODEwNn0=')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css')
     link(rel='stylesheet', href='./style.css')
@@ -56,16 +58,17 @@ html
                 button(value=-1, data-for='scoreA').increment#decrement-teamA Decrement Team A Score
                 button(value=1, data-for='scoreB').increment#increment-teamB Increment Team B Score
                 button(value=-1, data-for='scoreB').increment#decrement-teamB Decrement Team B Score
-                label(for='game-name') Game Name
-                input#game-name(rv-value='model:name')
-                label(for='teamA-name') Team A Name
-                input#teamA-name(rv-value='model:teamA')
-                label(for='teamA-score') Team A Score
-                input#teamA-score(rv-value='model:scoreA')
-                label(for='teamB-name') Team B Name
-                input#teamB-name(rv-value='model:teamB')
-                label(for='teamB-score') Team B Score
-                input#teamB-score(rv-value='model:scoreB')
+
+              label(for='game-name') Game Name
+              input#game-name(rv-value='model:name')
+              label(for='teamA-name') Team A Name
+              input#teamA-name(rv-value='model:teamA')
+              label(for='teamA-score') Team A Score
+              input#teamA-score(rv-value='model:scoreA')
+              label(for='teamB-name') Team B Name
+              input#teamB-name(rv-value='model:teamB')
+              label(for='teamB-score') Team B Score
+              input#teamB-score(rv-value='model:scoreB')
 
           .box.transactions-box
             .inner
