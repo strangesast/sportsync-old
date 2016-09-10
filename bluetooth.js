@@ -22,7 +22,7 @@ var val;
 
 var begin, end;
 
-var getBluetoothDevice = function(filters) {
+var getBluetoothDevice = function() {
   if(navigator.bluetooth == null) throw new Error('bluetooth unsupported');
   return navigator.bluetooth.requestDevice({
     filters: filters

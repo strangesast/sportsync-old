@@ -195,7 +195,13 @@ var GameView = PageView.extend({
     this.model.resetClock();
   },
   bluetoothclicked: function(e) {
-    console.log('ok');
+    getBluetoothDevice().then(function() {
+      return 'connection successful';
+    }).catch(function(err) {
+      return err;
+    }).then(function(val) {
+      alert(val);
+    });
   },
   incrementclicked: function(e) {
     var target = e.currentTarget;
