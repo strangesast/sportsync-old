@@ -19,7 +19,14 @@ router.get(['/', '/app$'], function(req, res, next) {
 // use '/app' prefix for all pages
 var appRouter = express.Router();
 
-appRouter.get('/', function(req, res, next) {
+const validTypes = ['games', 'players', 'teams']; // more to come
+appRouter.get('/:objectType/:objectId/*', function(req, res, next) {
+
+});
+
+appRouter.get('/games/:gameId'
+
+appRouter.get('/*', function(req, res, next) {
   return res.render('index', {test: true});
 });
 

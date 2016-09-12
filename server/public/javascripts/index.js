@@ -13,7 +13,6 @@ var PageView = Backbone.View.extend({
 var GameView = PageView.extend({
   el: '#game-page',
   initialize: function(params, attr) {
-    console.log('game view init');
     this.attributes = attr || {};
 
     this.model.on('timestart timestop timereset', this.watchClock);
@@ -62,29 +61,20 @@ var GameView = PageView.extend({
       clearInterval(this.timeUpdateInterval);
       this.timeUpdateInterval = null;
     }
-    //if(!this.model.clockRunning()) {
-    //  // start interval
-    //  console.log('stopped!');
-    //} else {
-    //  // stop interval
-    //  console.log('running!');
-    //}
   },
   render: function() {
     this.binding = this.binding || rivets.bind(this.el, { model: this.model, view: this});
   }
 }); // game page view
 
-var Router = Backbone.Router.extend({
-  initialize: function() {
-    Backbone.history.start({pushState: true});
-    this.socket = new WebSocket('ws:' + window.location.origin.slice(window.location.protocol.length) + '/sockets');
+var GameListView = Backbone.View.extend({
+  template: function() {
+    document.getElementById();
   },
-  routes: {
-    '': 'index'
+  initialize: function(attrs) {
+    this.type = attrs.type;
   },
-  index: function() {
-    console.log('index');
+  render: function() {
   }
 });
 
@@ -92,7 +82,13 @@ var teamCollection = new TeamCollection();
 var playerCollection = new PlayerCollection();
 var gameCollection = new GameCollection();
 
-var router = new Router();
+var socketURL = 'ws:' + window.location.origin.slice(window.location.protocol.length) + '/sockets';
+var router = new Router({
+  teams: new TeamCollection(),
+  players: new PlayerCollection(),
+  games: new GameCollection(),
+  socket: new WebSocket(socketURL)
+});
 
 var gameModel = gameCollection.create({
   name: 'Test game'

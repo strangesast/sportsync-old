@@ -1,6 +1,5 @@
 Backbone.ajax = function() {
   var args = Array.prototype.slice.call(arguments, 0);
-  console.log(args);
 };
 
 // pages
@@ -173,4 +172,65 @@ var GameEventCollection = Backbone.Collection.extend({
   model: GameEventModel
 });
 
+var pages = {};
+const validTypes = ['games', 'players', 'teams']; // more to come
+var Router = Backbone.Router.extend({
+  initialize: function(attrs) {
+    _.map(attrs, function(value, key) {
+      this[key] = value;
+    }, this);
+    Backbone.history.start({pushState: true});
+  },
+  routes: {
+    'app/': 'index',
+    'app/:objectType': 'objectListPage',
+    'app/:objectType/': 'objectListPage',
+    'app/:objectType/new': 'objectNewPage',
+    'app/:objectType/new/': 'objectNewPage',
+    'app/:objectType/*path': 'objectDetailPage'
+  },
+  validateType: function(type) {
+    var frag;
+    if(!(frag=Backbone.history.getFragment()).endsWith('/')) {
+      this.navigate(frag + '/', {replace: true});
+    }
+    if(validTypes.indexOf(type) == -1) {
+      throw new Error('invalid type');
+    }
+  },
+  objectListPage: function(objectType) {
+    this.validateType(objectType);
 
+    pages.hasOwnProperty(objectType + '-list');
+    console.log('list', objectType);
+  },
+  objectDetailPage: function(objectType, path) {
+    this.validateType(objectType);
+    // app/games/123/players etc
+    path = path || ''
+    var arr = path.split('/');
+    if(arr.length == 0) {
+      // list all games
+      return;
+    }
+    var col = this[objectType];
+    if(arr.length < 1) {
+      // return all of type
+      return;
+    }
+    var gameId = arr.shift();
+
+    var model = col.get(gameId);
+    if(model == null) {
+      // 404
+    }
+  },
+  objectNewPage: function(objectType) {
+    this.validateType(objectType);
+
+    console.log('new', objectType);
+  },
+  index: function(path) {
+    console.log('index');
+  }
+});
