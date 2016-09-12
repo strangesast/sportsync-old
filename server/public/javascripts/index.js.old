@@ -60,7 +60,7 @@ var models = (function() {
   };
 })();
 
-const TEMPLATE_SUFFIX = 'ElementTemplate';
+var TEMPLATE_SUFFIX = 'ElementTemplate';
 var getTemplate = function(name) {
   var templateId = name + TEMPLATE_SUFFIX;
   var templateElement = document.getElementById(templateId);

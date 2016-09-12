@@ -10,7 +10,7 @@ var convert = function(uuidStr) {
   return arr.join('-');
 }
 
-const serviceUuids = [convert('13333333333333333333333333333337')];
+var serviceUuids = [convert('13333333333333333333333333333337')];
 
 var filters = [
   {
