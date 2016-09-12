@@ -1,8 +1,371 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
 }
 
-a {
-  color: #00B7FF;
+body {
+  font: 14px "Open Sans", Arial, sans-serif;
+  background: lightgrey;
+}
+
+@sml: 400px;
+@med: 600px;
+@lrg: 1000px;
+@lrgm: (@lrg * ((2*@mp)*(1 + (2*@mp)) + 1));
+@mp: 0.1;
+
+.pages > *:not(:first-child) {
+  display:none;
+}
+.outer {
+}
+
+.inner {
+  margin: 0 0;
+  max-width: @lrg;
+  height: 100%;
+
+  @mp2: @med / ( @med - @sml ) * @mp;
+  @off: -@med * @sml / ( @med - @sml ) * @mp;
+
+  // sml -> med
+  @media(min-width: @sml) {
+    margin: 0 ~"calc(" @mp2*100% ~" + " @off ~")";
+  }
+  // med -> lrg
+  @media(min-width: @med) {
+    margin: 0 100%*@mp;
+  }
+  // lrg ->
+  @media(min-width: @lrgm) {
+    margin: 0 auto;
+  }
+}
+
+.outer, .inner {
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.centered {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.header {
+  height: 60px;
+  & > .inner {
+    display: flex;
+    align-items: center;
+
+    span {
+      padding: 8px;
+    }
+  }
+  font-size: 1.5em;
+  color: white;
+  background: #585858;
+  position: relative;
+  .page-title {
+    .centered;
+  }
+}
+
+@header-height: 60px;
+
+.info-container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 140px;
+  transition: transform 0.5s ease;
+  &.notification {
+    transform: translateY(@header-height);
+  }
+  .notification {
+    background: desaturate(lightyellow, 100%);
+    height: @header-height;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    transform: translateY(-@header-height);
+    transition: transform 0.5s ease;
+    .inner {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  .header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  .score-box {
+    position: absolute;
+    top: @header-height;
+    width: 100%;
+  }
+  .time-box {
+    position: absolute;
+    top: 260px;
+    width: 100%;
+  }
+}
+
+@c1: #808080;
+@c2: #D0D0D0;
+.score-box {
+  transition: height 0.4s ease 0.1s;
+  height: 200px;
+  background: linear-gradient(to right, @c1 0%, @c1 50%, @c2 51%, @c2 100%); 
+  z-index: 10;
+  width: 100%;
+  .inner {
+    display: flex;
+    overflow: hidden;
+    flex-direction: row;
+    position: relative;
+
+    .time {
+      display: none;
+      .content {
+        color: white;
+        font-size: 1.5em;
+        padding: 0 8px;
+      }
+    }
+
+    .time, .left, .right {
+      transition: flex-grow 0.2s ease;
+      flex-grow: 1;
+      transform: skewX(-20deg);
+      max-width: @lrg;
+      & > .content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        transform: skewX(20deg);
+        height: 100%;
+      }
+    }
+    .left, .right {
+      min-width: 80px;
+      .team {
+        position: absolute;
+      }
+    }
+    .left {
+      .team {
+        top: 0;
+        left: 0;
+      }
+      background: @c1;
+    }
+    .right {
+      .team {
+        bottom: 0;
+        right: 0;
+      }
+      & > .content {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+      }
+      background: @c2;
+    }
+  }
+  .score {
+    position: absolute;
+    top: 50%;
+    transition: font-size 0.4s ease 0.1s;
+    font-size: 6em;
+    padding: 10px;
+    color: white;
+  }
+  .left .score {
+    right: 10px;
+    transform: translate(-50px, -50%);
+  }
+  .right .score {
+    left: 10px;
+    transform: translate(50px, -50%);
+  }
+  @media(max-width: @med) {
+    .left .score {
+      right: -10px;
+    }
+    .right .score {
+      left: -10px;
+    }
+  }
+  .team {
+    opacity: 1;
+    transition: opacity 0.3s ease 0.2s;
+    padding: 10px;
+    font-size: 2em;
+    color: white;
+  }
+}
+
+.score-box.min {
+  .inner {
+    .time, .left, .right {
+      transition: flex-grow 0.5s ease;
+    }
+    .left {
+      flex-grow: 12;
+    }
+    .time {
+      display: block;
+      .content {
+        line-height: 80px;
+      }
+    }
+    .team {
+      transition: opacity 0s ease;
+      opacity: 0;
+    }
+    .score {
+      transition: font-size 0.5s ease;
+      font-size: 2em;
+    }
+  }
+  height: 80px;
+  transition: height 0.5s ease;
+}
+
+.boxes {
+  padding-top: 80px;
+  margin-top: 260px;
+  transition: all 0.5s ease;
+  &.min {
+    margin-top: 140px;
+  }
+}
+.time-box {
+  transition: transform 0.3s ease 0.2s;
+  z-index: 9;
+  height: @header-height;
+  & > .inner {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+
+    span {
+      padding: 8px;
+    }
+  }
+  font-size: 1.5em;
+  color: white;
+  background: #A8A8A8;
+
+  .time {
+    .centered;
+    font-size: 1.75em;
+  }
+}
+
+.time-box.min {
+  transition: all 0.3s ease;
+  transform: translateY(-180px);
+}
+
+//.transactions-box {
+//  padding-top: 80px;
+//  margin-top: 260px;
+//  transition: all 0.5s ease;
+//  &.min {
+//    margin-top: 140px;
+//  }
+//}
+
+.inner .navigation {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+  & > * {
+    display: inline-block;
+    padding: 8px;
+  }
+  .dropdown {
+    span:last-child {
+      padding: 8px;
+    }
+  }
+}
+
+.list-title {
+  padding: 8px;
+}
+.list {
+  .list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    padding: 8px;
+  }
+}
+
+.box > .inner > * {
+  display: flex;
+  flex-wrap: wrap;
+  .navigation {
+    flex-basis: 100%;
+  }
+  & > * {
+    flex-grow: 1;
+    flex-basis: @med;
+  }
+}
+
+/* index */
+.big-header {
+  height: 200px;
+  padding-top: 10px;
+  & > .inner {
+    display: flex;
+    align-items: flex-start;
+
+    span {
+      padding: 8px;
+    }
+  }
+  font-size: 1.5em;
+  color: white;
+  background: #585858;
+  position: relative;
+  .page-title {
+    font-size: 3em;
+    align-self: flex-end;
+    mix-blend-mode: difference;
+    margin-bottom: -20px;
+  }
+}
+
+.controls {
+  .inner {
+    min-height: 100px;
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      button {
+        flex-basis: 100px;
+        flex-grow: 1;
+        padding: 10px;
+        font-size: 1.25em;
+        margin: 10px;
+      }
+    }
+  }
 }

@@ -19,6 +19,9 @@
     "mocha": "^3.0.2",
     "expect.js": "^0.3.1",
     "jquery": "^3.1.0",
-    "rivets": "^0.9.4"
+    "rivets": "^0.9.4",
+    "font-awesome": "^4.6.3",
+    "underscore": "^1.8.3",
+    "open-sans": "^1.1.0"
   }
 }
