@@ -35,9 +35,11 @@ rivets.formatters['='] = function(value, arg) {
 };
 
 rivets.formatters.date = function(value){
-  return value.toISOString().slice(0, -14);
-}
-
-rivets.formatters.dateinput = function(value){
+  if(typeof value === 'string') {
+    var d = new Date(value);
+    d.setUTCHours(d.getUTCHours() + d.getTimezoneOffset()/60);
+    value = d;
+  }
+  //return value.toISOString().slice(0, -14);
   return value.toISOString().slice(0, 10);
 }

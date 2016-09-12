@@ -13,4 +13,9 @@ router.post('/loadboard', function(req, res) {
   return res.end(return_message);
 });
 
+router.get('/', function(req, res, next) {
+  res.status(200);
+  res.send();
+})
+
 module.exports = router;

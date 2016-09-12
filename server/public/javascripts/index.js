@@ -1,156 +1,278 @@
-var models = (function() {
-  var Model = Backbone.Model;
-  var Collection = Backbone.Collection;
+console.log(Backbone);
+Backbone.ajax = function() {
+  var args = Array.prototype.slice.call(arguments, 0);
+  console.log(args);
+};
 
-  var BaseModel = Model.extend({
-  });
-  var BaseCollection = Collection.extend({
-  });
+// pages
+//   game
+//   game list
+//   administration
+//   create new
 
-  var GameModel = Model.extend({
-    defaults: {
-    },
-    // override parse to process date attr correctly
-    parse: function(data) {
-      data.start = new Date(data.start);
-      return data;
-    }
-  });
-
-  var GameCollection = BaseCollection.extend({
-    url: '/api/games',
-    model: GameModel
-  });
-
-  var TeamModel = Model.extend({
-    defaults: {},
-    getPlayers: function() {
-      var ret = this.collection.getPlayers(this);
-      return ret;
-    }
-  });
-  var TeamCollection = BaseCollection.extend({
-    url: '/api/teams',
-    model: TeamModel
-  });
-
-  var PlayerModel = Model.extend({
-    defaults: {},
-    getTeam: function() {
-      return this.collection.getTeam(this);
-    },
-    getAllTeams: function() {
-      return this.collection.getAllTeams();
-    },
-    getAllOtherTeams: function() {
-      return this.collection.getAllOtherTeams(this);
-    }
-  });
-
-  var PlayerCollection = BaseCollection.extend({
-    url: '/api/players',
-    model: PlayerModel
-  });
-
-  return {
-    GameModel: GameModel,
-    GameCollection: GameCollection,
-    PlayerCollection: PlayerCollection,
-    TeamCollection: TeamCollection
-  };
-})();
-
-const TEMPLATE_SUFFIX = 'ElementTemplate';
-var getTemplate = function(name) {
-  var templateId = name + TEMPLATE_SUFFIX;
-  var templateElement = document.getElementById(templateId);
-  if(templateElement == null) throw new Error('template does not exist in document');
-  // return firstChild, otherwise it's a document fragment which is a pain
-  return document.importNode(templateElement.content, true).firstChild;
-}
-
-var View = Backbone.View;
-
-var ElementView = View.extend({
-  // view for a single game
-  initialize: function(params) {
-    this.setElement(getTemplate(params.name));
-    this.listenTo(this.model, 'change', this.render);
-  },
-  render: function() {
-    this.binding = this.binding || rivets.bind(this.el, {model: this.model});
-    return this;
-  },
-  remove: function() {
-    this.binding.unbind();
+var PageModel = Backbone.Model.extend({
+  //defaults: {
+  //  name:
+  //  title:
+  //},
+  initialize: function() {
+    console.log('page model init');
   }
 });
 
-var ElementCollectionView = View.extend({
-  // view for all games (list)
-  initialize: function(params) {
-    this.name = params.name;
-    this.listenTo(this.collection, 'sync', this.initializeSubViews);
-    this.initializeSubViews();
+var TeamModel = Backbone.Model.extend({
+  //defaults: {
+  //  name:
+  //  primaryColor:
+  //  secondaryColor:
+  //},
+});
+
+var TeamCollection = Backbone.Collection.extend({
+  url: '/teams',
+  model: TeamModel
+});
+
+var PlayerModel = Backbone.Model.extend({
+  //defaults: {
+  //  name:
+  //  age:
+  //  team: // unattached
+  //}
+});
+
+var PlayerCollection = Backbone.Collection.extend({
+  url: '/players',
+  model: PlayerModel
+});
+
+var GameModel = Backbone.Model.extend({
+  defaults: {
+    time: 0,
+    timeAccum: 0,
+    timeLastStart: null,
+    timeLastStop: null,
+    scoreA: 0,
+    scoreB: 0,
+    teamA: 'Team AAAA', // will be moved to team model
+    teamB: 'Team BBBB'  // |
   },
-  initializeSubViews: function() {
-    var subViews = [];
-    var name = this.name;
-    this.collection.each(function(model) {
-      subViews.push(new ElementView({model: model, name: name}));
-    });
-    this.subViews = subViews;
-    this.render();
+  updateInterval: 100,
+  initialize: function() {
+    this.timeUpdateInterval = null;
   },
-  render: function() {
-    var el = this.el;
-    this.subViews.forEach(function(view) {
-      var subel = view.render().el;
-      // append to parent list if not already attached
-      if(!(subel.parentNode && subel.parentNode === el)) el.appendChild(subel);
+  // should really separate out the clock but for now...
+  timeFormatter: function(duration) {
+    var milliseconds = parseInt((duration%1000)/100)
+        , seconds = parseInt((duration/1000)%60)
+        , minutes = parseInt((duration/(1000*60))%60)
+        , hours = parseInt((duration/(1000*60*60))%24);
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  },
+  resetClock: function() {
+    var ctime = this.updateTime();
+    this.set({
+      time: 0,
+      timeAccum: 0,
+      timeLastStart: null,
+      timeLastStop: null
     });
-    return this;
+    this.trigger('timereset', ctime);
+    return ctime;
+  },
+  updateTime: function(time) {
+    // replace time with time
+    var lastStop = this.get('timeLastStop');
+    var lastStart = this.get('timeLastStart');
+    var accum = this.get('timeAccum');
+    var time = this.get('time');
+    if(this.clockRunning()) {
+      time = Date.now() - lastStart + accum;
+    } else {
+      time = accum; // but probably zero
+    }
+    this.set('time', time);
+    return time;
+  },
+  getTime: function(formatted) {
+    var time = this.updateTime();
+    return formatted ? this.timeFormatter(time) : time;
+  },
+  setTime: function(time) {
+    this.get('timeLastStart')
+    this.get('timeLastStop')
+    this.get('timeAccum')
+    this.trigger('timereset', ctime);
+  },
+  toggleClock: function() {
+    return this.clockRunning() ? this.stopClock() : this.startClock();
+  },
+  startClock: function() {
+    if(this.clockRunning()) return;
+    var datetime = Date.now();
+    this.set('timeLastStart', datetime);
+    this.trigger('timestart', datetime);
+    return datetime;
+  },
+  stopClock: function() {
+    if(!this.clockRunning()) return;
+    var datetime = Date.now();
+    this.set('timeLastStop', datetime);
+    this.set('timeAccum', this.get('timeAccum') + datetime - this.get('timeLastStart')); // needs checking
+    this.updateTime(); // sometimes redundant
+    clearInterval(this.timeUpdateInterval); // probably (always) redundant
+    this.trigger('timestop', datetime);
+    return datetime;
+  },
+  clockRunning: function() {
+    var lastStart = this.get('timeLastStart');
+    if(lastStart == null) return false;
+    var lastStop = this.get('timeLastStop');
+    if(lastStart != null && lastStop == null) return true;
+    return lastStart > lastStop; 
   }
 });
 
-var games = new models.GameCollection();
-var teams = new models.TeamCollection();
-// necessary. so that players can be accessed from team element
-teams.getPlayers = function(t) {
-  return players.where({team: t.id});
-};
-
-var players = new models.PlayerCollection();
-players.teams = teams;
-// necessary. so that teams can be accessed from player element
-players.getTeam = function(m) {
-  return teams.findWhere({id: m.get('team')});
-};
-players.getAllTeams = function() {
-  return teams.where();
-};
-players.getAllOtherTeams = function(m) {
-  return teams.filter(function(el) {
-    return el.get('id') != m.get('team');
-  });
-};
-
-
-
-// initial fetch... shouldn't be necessary
-[games, teams, players].reduce(function(a, b) {
-  return a.then(function() {
-    return b.fetch();
-  });
-}, Promise.resolve()).then(function() {
-   
-  // view setup
-  var gameListView = new ElementCollectionView({collection: games, el: '#game-list', name: 'game'});
-  var teamListView = new ElementCollectionView({collection: teams, el: '#team-list', name: 'team'});
-  var playerListView = new ElementCollectionView({collection: players, el: '#player-list', name: 'player'});
+var GameCollection = Backbone.Collection.extend({
+  url: '/games',
+  model: GameModel
 });
 
+var GameEventModel = Backbone.Model.extend({
+  //defaults: {
+  //  object: // which object
+  //  prop: // property
+  //  value: // new value
+  //  action: // what occurred
+  //  by: // by who
+  //  time: // when
+  //  last: // last event in chain, null only ok if first
+  //},
+});
+var GameEventCollection = Backbone.Collection.extend({
+  url: '/transactions',
+  model: GameEventModel
+});
 
+var PageView = Backbone.View.extend({
+  initialize: function() {
+    console.log('page view init');
+    // notification
+    // template / element id
+  },
+  render: function() {
+    this.binding = this.binding || rivets.bind(this.el, { model: this.model });
+  }
+});
+
+var GameView = PageView.extend({
+  el: '#game-page',
+  initialize: function(params, attr) {
+    console.log('game view init');
+    this.attributes = attr || {};
+
+    this.model.on('timestart timestop timereset', this.watchClock);
+  },
+  events: {
+    'click #start-clock': 'startclicked',
+    'click #stop-clock': 'stopclicked',
+    'click #reset-clock': 'resetclicked',
+    'click #connect-bluetooth': 'bluetoothclicked',
+    'click button.increment': 'incrementclicked'
+  },
+  startclicked: function(e) {
+    this.model.startClock();
+  },
+  stopclicked: function(e) {
+    this.model.stopClock();
+  },
+  resetclicked: function(e) {
+    this.model.resetClock();
+  },
+  bluetoothclicked: function(e) {
+    getBluetoothDevice().then(function() {
+      return 'connection successful';
+    }).catch(function(err) {
+      return err;
+    }).then(function(val) {
+      alert(val);
+    });
+  },
+  incrementclicked: function(e) {
+    var target = e.currentTarget;
+    var f = target.getAttribute('data-for');
+    var v = Number(target.value);
+    this.model.set(f, Math.max(this.model.get(f) + v, 0));
+  },
+  watchClock: function(timestamp) {
+    // 'this' is model
+    console.log(this.changed);
+    if(this.changed.hasOwnProperty('timeLastStart')) { // starting
+      // create interval, if not created
+      // two 'watchers' complicates this
+      this.timeUpdateInterval = this.timeUpdateInterval || setInterval(function() {
+        this.updateTime();
+      }.bind(this), this.updateInterval);
+    } else {
+      clearInterval(this.timeUpdateInterval);
+      this.timeUpdateInterval = null;
+    }
+    //if(!this.model.clockRunning()) {
+    //  // start interval
+    //  console.log('stopped!');
+    //} else {
+    //  // stop interval
+    //  console.log('running!');
+    //}
+  },
+  render: function() {
+    this.binding = this.binding || rivets.bind(this.el, { model: this.model, view: this});
+  }
+}); // game page view
+
+var Router = Backbone.Router.extend({
+  initialize: function() {
+    Backbone.history.start({pushState: true});
+  },
+  routes: {
+    '': 'index'
+  },
+  index: function() {
+    console.log('index');
+  }
+});
+
+var teamCollection = new TeamCollection();
+var playerCollection = new PlayerCollection();
+var gameCollection = new GameCollection();
+
+var router = new Router();
+
+var gameModel = gameCollection.create({
+  name: 'Test game'
+});
+
+var gameView = new GameView({model: gameModel});
+gameView.render();
+
+// if(typeof window.orientation !== 'undefined'){...}
+window.addEventListener('scroll', function(e) {
+  var scrollY = window.scrollY;
+  if(scrollY > 20) {
+    document.querySelector('.score-box').classList.add('min');
+    document.querySelector('.time-box').classList.add('min');
+    document.querySelector('.boxes').classList.add('min');
+  } else {
+    document.querySelector('.score-box').classList.remove('min');
+    document.querySelector('.time-box').classList.remove('min');
+    document.querySelector('.boxes').classList.remove('min');
+  }
+});
 
 //TEST FUNCTIONS
 if (!String.format) {
