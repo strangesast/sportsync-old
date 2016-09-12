@@ -238,6 +238,7 @@ var GameView = PageView.extend({
 var Router = Backbone.Router.extend({
   initialize: function() {
     Backbone.history.start({pushState: true});
+    this.socket = new WebSocket('ws:' + window.location.origin.slice(window.location.protocol.length) + '/sockets');
   },
   routes: {
     '': 'index'
