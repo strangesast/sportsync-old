@@ -20,11 +20,11 @@ router.get(['/', '/app$'], function(req, res, next) {
 var appRouter = express.Router();
 
 const validTypes = ['games', 'players', 'teams']; // more to come
-appRouter.get('/:objectType/:objectId/*', function(req, res, next) {
+//appRouter.get('/:objectType/:objectId/*', function(req, res, next) {
+//
+//});
 
-});
-
-appRouter.get('/games/:gameId'
+//appRouter.get('/games/:gameId'
 
 appRouter.get('/*', function(req, res, next) {
   return res.render('index', {test: true});
@@ -50,5 +50,9 @@ apiRouter.post('/:objectName', function(req, res, next) {
 });
 
 router.use('/api', apiRouter);
+
+router.get('/static/:pageName?', function(req, res, next) {
+  res.render('static/' + (req.params.pageName || 'index'));// || 'index');
+});
 
 module.exports = router;
