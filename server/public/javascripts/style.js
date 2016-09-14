@@ -15,6 +15,11 @@
 //
 var start = function* () {
   while(true) {
+
+    yield 0;
+
+    document.querySelector('.page').classList.remove('player');
+    document.querySelector('.page').classList.add('game');
     document.querySelector('.page').classList.add('short');
     document.querySelector('.window').classList.add('right');
     yield 1;
@@ -22,20 +27,28 @@ var start = function* () {
     document.querySelector('.window').classList.remove('right');
 
     yield 2;
+    document.querySelector('.page').classList.remove('game');
     document.querySelector('.page').classList.add('index');
 
     yield 3;
 
     document.querySelector('.page').classList.remove('index');
+    document.querySelector('.page').classList.add('game');
     document.querySelector('.page').classList.add('short');
     document.querySelector('.window').classList.add('right');
 
     yield 4;
 
+    document.querySelector('.page').classList.remove('game');
     document.querySelector('.page').classList.remove('short');
     document.querySelector('.window').classList.remove('right');
 
     yield 5;
+
+    document.querySelector('.page').classList.add('player');
+
+    yield 6;
+
 
   }
 };

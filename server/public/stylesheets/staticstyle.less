@@ -6,7 +6,7 @@ html, body {
 
 body {
   font: 14px "Open Sans", Arial, sans-serif;
-  background: g12;
+  background: @g12;
 }
 @header-height: 60px;
 @window-height: 200px;
@@ -53,40 +53,33 @@ body {
 }
 .page > .top {
   height: @window-height + @header-height + @title-height;
-}
-.page.game > .bottom {
-  min-height: ~"calc(100% - 320px)";
-}
-.page > .top > .window {
-  position: relative;
-  overflow: hidden;
-  background: @g11;
-  height: @window-height + @title-height;
-  .left, .right {
-    position: relative;
-    height: ~"calc(100% - " @title-height ~")";
-    min-width: 50%;
-    display: inline-block;
-  }
-  .title {
-    position: absolute;
-    top: ~"calc(100% - " @title-height ~")";
-    left: 0;
-    right: 0;
-    height: @title-height;
-    background: @g8;
-    z-index: 10;
-  }
 
-}
-.page.game > .top > .window {
-  .left, .right {
-    transform: skewX(-20deg);
-    z-index: 9;
-    & > .content {
-      transform: skewX(20deg);
+  & > .window {
+    position: relative;
+    overflow: hidden;
+    background: @g11;
+    height: @window-height + @title-height;
+    .left, .right {
+      position: relative;
+      height: ~"calc(100% - " @title-height ~")";
+      min-width: 50%;
+      display: inline-block;
+    }
+    .title {
+      position: absolute;
+      top: ~"calc(100% - " @title-height ~")";
+      left: 0;
+      right: 0;
+      height: @title-height;
+      background: @g8;
+      z-index: 10;
     }
   }
+
+
+}
+
+.page > .top > .window {
   &.straight {
     .left, .right {
       transform: skewX(0deg);
@@ -121,11 +114,28 @@ body {
     margin-right: -200px;
     padding-right: 200px;
   }
-  .title {
-    z-index: 9;
+}
+
+.page.game {
+  & > .top > .window {
+    .left, .right {
+      transform: skewX(-20deg);
+      z-index: 9;
+      & > .content {
+        transform: skewX(20deg);
+      }
+    }
+    .title {
+      z-index: 9;
+    }
+  }
+  & > .bottom {
+    min-height: ~"calc(100% - " (@header-height + @window-height + @title-height) ~")";
   }
 }
+
 .bottom > .inner > .content {
+  // placeholder
   background: @g6;
   min-height: 500px;
 }
@@ -176,7 +186,7 @@ body {
 
       .title {
         z-index: 11;
-        top: ~"calc(50% -" (@header-height/2) ~");";
+        top: ~"calc(50% -" (3/2*@header-height) ~");";
       }
     }
   }
@@ -187,8 +197,24 @@ body {
   }
 }
 
+.page.player {
+  .window {
+    //height: @window-height + @title-height;
+    .left {
+      min-width: 25%;
+    }
+    .right {
+      min-width: 75%;
+      transform: translateX(100%);
+    }
+    .title {
+      background: rgba(0, 0, 0, 0);
+    }
+  }
+}
+
 *, * * {
-  transition: all 1s ease, transform 0.5s ease 0.2s;
+  transition: all 1s ease, transform 0.5s ease 0.2s, z-index 1ms;
 }
 
 @sml: 400px;
