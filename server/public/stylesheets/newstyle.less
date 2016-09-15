@@ -33,6 +33,10 @@ body {
   padding-top: 1px;
 }
 
+.pages > .page:not(:first-child) {
+  display:none;
+}
+
 .pages .header-container {
   position: fixed;
   height: @header-height + @window-height + @time-height;
@@ -49,6 +53,14 @@ body {
   padding-top: @header-height+@window-height+@time-height;
 }
 
+.pages.header-only {
+  & > .header-container {
+    height: @header-height;
+  }
+  & > .page {
+    padding-top: @header-height;
+  }
+}
 .pages.short .page {
   padding-top: @header-height+@window-short-height;
 }
@@ -57,7 +69,6 @@ body {
 }
 .pages.short .time {
   transform: translateY(-100%);
-  z-index: -1;
 }
 
 .header {
@@ -168,6 +179,7 @@ body {
 
 .box.wide.right {
   .left {
+    width: 70%;
     @media(min-width: @sml) {
       //width: ~"calc(calc(100% - 200px) - calc(" @mp2*100% ~" + " @off ~"));";
       width: ~"calc(100% - 200px)";
@@ -184,6 +196,7 @@ body {
     }
   }
   .right {
+    width: 30%;
     @media(min-width: @sml) {
       width: ~"calc(200px + calc(" @mp2*100% ~" + " @off ~"));";
     }
@@ -201,10 +214,10 @@ body {
 .box.time {
   height: @time-height;
   background: @g11;
+  z-index: -1;
 }
 
 .box.body {
-  min-height: 1500px;
 }
 
 .box > .left:before {
@@ -220,6 +233,21 @@ body {
 .pages.short > .header-container > .window {
   height: @window-short-height;
 }
+.box.into {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  & > .panel {
+    .container {
+      display: flex;
+      justify-content: center;
+      span {
+        padding:10px;
+      }
+    }
+  }
+}
 
 .page {
   position: relative;
@@ -228,3 +256,7 @@ body {
     height: 100%;
   }
 }
+
+//*, * * {
+//  transition: width 0.5s ease, height 0.5s ease, padding 0.5s ease, transform 0.5s ease;
+//}
