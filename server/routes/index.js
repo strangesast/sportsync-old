@@ -55,4 +55,10 @@ router.get('/experimental/:pageName?', function(req, res, next) {
   res.render('experimental/' + (req.params.pageName || 'index'));// || 'index');
 });
 
+router.get('/static/:pageName?', function(req, res, next) {
+  res.render('static/' + (req.params.pageName || 'index'));// || 'index');
+});
+
+
+
 module.exports = router;

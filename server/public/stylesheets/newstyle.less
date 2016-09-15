@@ -1,0 +1,230 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font: 14px "Open Sans", Arial, sans-serif;
+}
+
+@header-height: 60px;
+@window-height: 200px;
+@window-short-height: 80px;
+@time-height: 60px;
+
+// temporary
+@g1: #000000;
+@g2: #101010;
+@g3: #202020;
+@g4: #303030;
+@g5: #404040;
+@g6: #505050;
+@g7: #606060;
+@g8: #707070;
+@g9: #808080;
+@g10: #909090;
+@g11: #A0A0A0;
+@g12: #B0B0B0;
+
+.pages {
+  height: 100%;
+  margin-top: -1px;
+  padding-top: 1px;
+}
+
+.pages .header-container {
+  position: fixed;
+  height: @header-height + @window-height + @time-height;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: @g12;
+  z-index: 10;
+}
+
+.pages .page {
+  //overflow: auto; // necessary at some point
+  height: ~"calc(100% -" @header-height ~");";
+  padding-top: @header-height+@window-height+@time-height;
+}
+
+.pages.short .page {
+  padding-top: @header-height+@window-short-height;
+}
+.pages.short .header-container {
+  height: @header-height+@window-short-height;
+}
+.pages.short .time {
+  transform: translateY(-100%);
+  z-index: -1;
+}
+
+.header {
+  height: @header-height;
+}
+
+@sml: 400px;
+@med: 600px;
+@lrg: 1000px;
+@mp: 0.1; // minimum percentage
+@lrgm: (@lrg * ((2*@mp)*(1 + (2*@mp)) + 1));
+@mp2: @med / ( @med - @sml ) * @mp; // 2nd minimum percentage
+@off: -@med * @sml / ( @med - @sml ) * @mp; // offset for ^
+
+.container {
+  margin: 0 0;
+  // sml -> med
+  @media(min-width: @sml) {
+    margin: 0 ~"calc(" @mp2*100% ~" + " @off ~")";
+  }
+  // med -> lrg
+  @media(min-width: @med) {
+    margin: 0 100%*@mp;
+  }
+  // lrg ->
+  @media(min-width: @lrgm) {
+    margin: 0 ~"calc(50% - " @lrg/2 ~");";
+  }
+}
+
+/* end general */
+.box {
+
+}
+
+// uugglllyy
+.box.wide {
+  position: relative;
+  display: flex;
+
+  .left:before, .right:after {
+    content: '';
+    width: 125%;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .left, .right {
+    position: relative;
+    display:flex;
+    height: 100%;
+    width: 50%;
+    transform: skewX(-20deg);
+    & > .content {
+      flex-grow: 1;
+      transform: skewX(20deg);
+    }
+  }
+  .left {
+    padding-left: 0;
+    &:before {
+      right: 0;
+    }
+  }
+  .right {
+    padding-right: 0;
+    &:after {
+      left: 0;
+    }
+  }
+  @media(min-width: @sml) {
+    .left, .right {
+      width: ~"calc(50% - calc(" @mp2*100% ~" + " @off ~"));";
+    }
+    .left {
+      padding-left: ~"calc(" @mp2*100% ~" + " @off ~")";
+    }
+    .right {
+      padding-right: ~"calc(" @mp2*100% ~" + " @off ~")";
+    }
+  }
+  @media(min-width: @med) {
+    .left, .right {
+      width: ~"calc(50% - " (100%*@mp) ~");";
+    }
+    .left {
+      padding-left: 100%*@mp;
+    }
+    .right {
+      padding-right: 100%*@mp;
+    }
+  }
+  @media(min-width: @lrgm) {
+    .left, .right {
+      width: ~"calc(50% - calc(50% - " @lrg/2 ~"));";
+    }
+    .left {
+      padding-left: ~"calc(50% - " @lrg/2 ~");";
+    }
+    .right {
+      padding-right: ~"calc(50% - " @lrg/2 ~");";
+    }
+  }
+}
+
+.box.wide.right {
+  .left {
+    @media(min-width: @sml) {
+      //width: ~"calc(calc(100% - 200px) - calc(" @mp2*100% ~" + " @off ~"));";
+      width: ~"calc(100% - 200px)";
+    }
+    // med -> lrg
+    @media(min-width: @med) {
+      //width: ~"calc(calc(100% - 200px) - calc(" (100%*@mp) ~"));";
+      width: ~"calc(100% - 200px)";
+    }
+    // lrg ->
+    @media(min-width: @lrgm) {
+      //width: ~"calc(calc(100% - 200px) - calc(50% - " @lrg/2 ~"));";
+      width: ~"calc(100% - 200px)";
+    }
+  }
+  .right {
+    @media(min-width: @sml) {
+      width: ~"calc(200px + calc(" @mp2*100% ~" + " @off ~"));";
+    }
+    // med -> lrg
+    @media(min-width: @med) {
+      width: ~"calc(200px + " (100%*@mp) ~");";
+    }
+    // lrg ->
+    @media(min-width: @lrgm) {
+      width: ~"calc(200px + calc(50% - " @lrg/2 ~"));";
+    }
+  }
+}
+
+.box.time {
+  height: @time-height;
+  background: @g11;
+}
+
+.box.body {
+  min-height: 1500px;
+}
+
+.box > .left:before {
+  background-color: @g10;
+}
+.box > .right:after {
+  background-color: @g9;
+}
+.window {
+  height: @window-height;
+  overflow-x: hidden;
+}
+.pages.short > .header-container > .window {
+  height: @window-short-height;
+}
+
+.page {
+  position: relative;
+  padding-top: 20px;
+  .container {
+    height: 100%;
+  }
+}
