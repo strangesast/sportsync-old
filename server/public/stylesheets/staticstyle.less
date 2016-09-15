@@ -13,6 +13,17 @@ body {
 @window-short-height: 80px;
 @title-height: 60px;
 
+// inner margins
+@sml: 400px;
+@med: 600px;
+@lrg: 1000px;
+@lrgm: (@lrg * ((2*@mp)*(1 + (2*@mp)) + 1));
+@mp: 0.1;
+@mp2: @med / ( @med - @sml ) * @mp;
+@off: -@med * @sml / ( @med - @sml ) * @mp;
+
+
+
 @g1: #000000;
 @g2: #101010;
 @g3: #202020;
@@ -34,7 +45,7 @@ body {
   margin-top: -1px;
   padding-top: 1px;
   position: relative;
-  overflow: auto;
+  overflow: hidden;
 }
 .top {
   position: absolute;
@@ -46,6 +57,7 @@ body {
   margin-top: @header-height + @window-height + @title-height - 1px;
   background: @g7;
   padding-bottom: 1px;
+  min-height: ~"calc(100% - " (@header-height + @window-height + @title-height) ~")";
 }
 .header {
   background: @g12;
@@ -57,13 +69,44 @@ body {
   & > .window {
     position: relative;
     overflow: hidden;
-    background: @g11;
+    display: flex;
     height: @window-height + @title-height;
+
     .left, .right {
-      position: relative;
+      //position: relative;
       height: ~"calc(100% - " @title-height ~")";
-      min-width: 50%;
-      display: inline-block;
+      width: 50%;
+      display: flex;
+      flex-grow: 1;
+      z-index: 10;
+
+      & > .spacer {
+        flex-shrink: 1;
+        // sml -> med
+        @media(min-width: @sml) {
+          width: ~"calc(" @mp2*200% ~" + " @off ~")";
+        }
+        // med -> lrg
+        @media(min-width: @med) {
+          width: 200%*@mp;
+        }
+        // lrg ->
+        @media(min-width: @lrgm) {
+          flex-grow: 1;
+        }
+      }
+
+      & > .content {
+        // sml -> med
+        flex-grow: 1;
+        @media(min-width: @lrgm) {
+          flex-grow: 0;
+          //min-width: (@lrg/2);
+        }
+      }
+    }
+    .right {
+      flex-direction: row-reverse;
     }
     .title {
       position: absolute;
@@ -72,7 +115,7 @@ body {
       right: 0;
       height: @title-height;
       background: @g8;
-      z-index: 10;
+      z-index: 9;
     }
   }
 
@@ -90,29 +133,42 @@ body {
   }
   &.right {
     .left {
-      min-width: 75%;
+      width: 700px;
+      @media(min-width: @lrgm) {
+        .content {
+          width: 700px;
+        }
+      }
     }
     .right {
-      min-width: 25%;
+      width: 300px;
+      @media(min-width: @lrgm) {
+        .content {
+          width: 300px;
+        }
+      }
+
     }
+    // tbd
   }
-  &.left {
-    .left {
-      min-width: 25%;
-    }
-    .right {
-      min-width: 75%;
-    }
+  .left:before, .right:after {
+      content: '';
+      width: 200px; 
+      height: 100%;
+      position: absolute;
+      background: inherit;
   }
   .left {
     background: @g10;
-    margin-left: -200px;
-    padding-left: 200px;
+    &:before {
+      left: -199px;
+    }
   }
   .right {
     background: @g9;
-    margin-right: -200px;
-    padding-right: 200px;
+    &:after {
+      right: -199px;
+    }
   }
 }
 
@@ -191,45 +247,58 @@ body {
     }
   }
   .bottom {
-    //transform: translateY(100%);
+    transform: translateY(100%);
     height: 0;
     overflow: hidden;
   }
 }
 
 .page.player {
+  .top {
+  }
+  .header, .window {
+    background: rgba(0, 0, 0, 0);
+  }
   .window {
-    //height: @window-height + @title-height;
+    height: @window-height + @title-height;
+
     .left {
-      min-width: 25%;
+      background: rgba(0, 0, 0, 0);
+      & > .content {
+        @media(min-width:@lrgm) {
+          min-width: 500px;
+        }
+      }
     }
     .right {
-      min-width: 75%;
       transform: translateX(100%);
     }
     .title {
       background: rgba(0, 0, 0, 0);
     }
+    @media(max-width: @sml) {
+      .left {
+        width: 100%;
+      }
+      .right {
+        width: 0;
+      }
+    }
+
+  }
+  & > .bottom {
+    min-height: ~"calc(100% - " (@header-height + @window-height + @title-height) ~")";
   }
 }
 
 *, * * {
-  transition: all 1s ease, transform 0.5s ease 0.2s, z-index 1ms;
+  transition: all 1s ease, transform 0.5s ease 0.2s, z-index 1ms, flex 1ms;
 }
-
-@sml: 400px;
-@med: 600px;
-@lrg: 1000px;
-@lrgm: (@lrg * ((2*@mp)*(1 + (2*@mp)) + 1));
-@mp: 0.1;
 
 .inner {
   margin: 0 0;
   max-width: @lrg;
   height: 100%;
-
-  @mp2: @med / ( @med - @sml ) * @mp;
-  @off: -@med * @sml / ( @med - @sml ) * @mp;
 
   // sml -> med
   @media(min-width: @sml) {
