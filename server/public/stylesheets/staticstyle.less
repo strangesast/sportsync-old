@@ -45,7 +45,7 @@ body {
   margin-top: -1px;
   padding-top: 1px;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
 }
 .top {
   position: absolute;
@@ -179,6 +179,7 @@ body {
       z-index: 9;
       & > .content {
         transform: skewX(20deg);
+        min-width: @lrg/2;
       }
     }
     .title {
@@ -193,7 +194,7 @@ body {
 .bottom > .inner > .content {
   // placeholder
   background: @g6;
-  min-height: 500px;
+  min-height: 1500px;
 }
 
 .page.short {
