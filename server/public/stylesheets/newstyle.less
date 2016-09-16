@@ -212,8 +212,12 @@ body.full {
     }
   }
 }
+.pages .page { //temporary
+  transition: min-height 0.5s ease, padding 0.5s ease;
+}
 .pages.short .page {
   padding-top: @header-height+@window-short-height;
+  min-height: ~"calc(100% - " (@header-height+@window-short-height) ~");";
 }
 .pages.short .header-container {
   height: @header-height+@window-short-height;
