@@ -56,6 +56,61 @@ body.full {
   }
 }
 
+.dropdown {
+  position: relative;
+  height: @header-height*3/4;
+  width: @header-height*3/4;
+  @media(max-width: @sml) {
+    height: @header-height;
+    width: @header-height;
+    margin: 0;
+  }
+  .dropdown-label {
+    position: absolute;
+    top: 50%;;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 11;
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    min-width: 180px;
+    padding: 10px;
+    padding-top: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    .item {
+      white-space: nowrap;
+    }
+  }
+  &.active {
+    .dropdown-menu {
+      display: block;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+      background: @g12;
+    }
+  }
+}
+
+.header {
+  @media(max-width: @sml) {
+    .dropdown > .dropdown-menu {
+      transform: translateX(-100vw);
+      display: block;
+      transition: transform 0.5s ease;
+      top: 0;
+      height: ~"calc(100vh -" @header-height ~");";
+      width: ~"calc(100vw - 80px)";
+    }
+    .dropdown.active > .dropdown-menu {
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+      transform: translateX(0vw);
+    }
+  }
+}
+
 .pages {
   height: 100%;
   margin-top: -1px;
@@ -64,37 +119,6 @@ body.full {
 
 .pages > .page:not(:first-child) {
   display:none;
-}
-
-.pages > .header-container > .header-menu {
-  position: absolute;
-  display: none;
-  left: 0;
-  top: @header-height;
-  width: 100%;
-  height: ~"calc(100vh - " @header-height ~");";
-  background: @g2;
-  color: @g12;
-  z-index: 11;
-  & > .container {
-    display: flex;
-    flex-direction: column;
-  }
-  @media(min-width: @med) {
-    height: @header-height;
-    top: 0;
-    & > .container {
-      flex-direction: row;
-    }
-  }
-  transform: translateY(-100%);
-}
-.pages.header-offset > .header-container > .header-menu {
-  display: block;
-  transform: translateY(0);
-  @media(min-width: @med) {
-    transform: translateY(-100%);
-  }
 }
 
 .pages .header-container {

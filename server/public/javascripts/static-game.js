@@ -14,6 +14,6 @@ window.addEventListener('scroll', function(e) {
 });
 
 document.querySelector('.fa-bars').addEventListener('click', function(e) {
-  document.querySelector('.pages').classList.toggle('header-offset');
-  document.body.classList.toggle('full');
+  document.querySelector('.dropdown').classList.toggle('active');
+  document.querySelector('body').classList.toggle('full');
 });
