@@ -4,22 +4,50 @@ extends layout
 block content
   .pages
     .page
+      .container
+        .box.list
+          h1 List title
+          .list-item
+            span List Item 1
+          .list-item
+            span List Item 2
+          .list-item
+            span List Item 3
+          .list-item
+            span List Item 4
+          .list-item
+            span List Item 5
+
       .box.body
         .container
           span body content
 
     .header-container
+      .header-menu
+        .container
+          .header-menu-item Item 1
+          .header-menu-item Item 2
+          .header-menu-item Item 3
+          .header-menu-item Item 4
+          .header-menu-item Item 5
+          .header-menu-item Item 6
+          .header-menu-item Item 7
+          .header-menu-item Item 8
+          .header-menu-item Item 9
+
       include header
-      .box.wide.window
+      .box.wide.window.score
         .left
           .content
-            span Content
+            span 10
         .right
           .content
-            span Content
-      .box.wide.time
+            span 9
+      .box.time
         .container
+          .spacer
           span time
+          .spacer
 
 block scripts
   script(src='/javascripts/static-game.js')
