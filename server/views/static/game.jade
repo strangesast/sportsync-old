@@ -5,6 +5,9 @@ block content
   .pages
     .page
       .container
+        .box
+
+      .container
         .box.list
           h1 List title
           .list-item
@@ -18,23 +21,19 @@ block content
           .list-item
             span List Item 5
 
-      .box.body
-        .container
-          span body content
-
     .header-container
       include header
       .box.wide.window.score
         .left
           .content
-            span 10
+            span.score { model:scoreA }
         .right
           .content
-            span 9
+            span.score { model:scoreB }
       .box.time
         .container
           .spacer
-          span time
+          span { model:time | formatTime }
           .spacer
 
 block scripts

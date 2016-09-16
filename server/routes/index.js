@@ -26,8 +26,19 @@ const validTypes = ['games', 'players', 'teams']; // more to come
 
 //appRouter.get('/games/:gameId'
 
-appRouter.get('/*', function(req, res, next) {
-  return res.render('index', {test: true});
+
+appRouter.get(['/:pageName?/', '/:pageName/:pageInstance?/*'], function(req, res, next) {
+  var pageName = req.params.pageName || 'index';
+  var pageInstance = req.params.pageInstance;
+  console.log(pageInstance != null);
+  if(pageName.endsWith('s')) {
+    pageName = pageName.slice(0, -1);
+    if(pageInstance == null) { // whew
+      pageName += '_list'; // if a specific object isn't requested, return list
+    }
+  }
+
+  return res.render(pageName, {test: true});
 });
 
 router.use('/app', appRouter);

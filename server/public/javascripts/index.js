@@ -99,15 +99,33 @@ gameView.render();
 
 // if(typeof window.orientation !== 'undefined'){...}
 window.addEventListener('scroll', function(e) {
-  var scrollY = window.scrollY;
-  if(scrollY > 20) {
-    document.querySelector('.score-box').classList.add('min');
-    document.querySelector('.time-box').classList.add('min');
-    document.querySelector('.boxes').classList.add('min');
+  var s = window.scrollY;
+  if(s < 1) {
+    document.querySelector('.pages').classList.remove('short');
+    document.querySelector('.wide').classList.remove('right');
   } else {
-    document.querySelector('.score-box').classList.remove('min');
-    document.querySelector('.time-box').classList.remove('min');
-    document.querySelector('.boxes').classList.remove('min');
+    if(!document.querySelector('.pages').classList.contains('short')) {
+      window.scrollTo(0, 1);
+      document.querySelector('.pages').classList.add('short');
+      document.querySelector('.wide').classList.add('right');
+      e.preventDefault();
+    }
+  }
+});
+
+document.querySelector('.fa-bars').addEventListener('click', function() {
+  if(!document.querySelector('.dropdown').classList.contains('active')) {
+    document.querySelector('.dropdown').classList.add('active');
+    document.querySelector('body').classList.add('full');
+
+    var func = function(e) {
+      document.querySelector('.dropdown').classList.remove('active');
+      document.querySelector('body').classList.remove('full');
+      window.removeEventListener('click', func, false);
+    };
+    setTimeout(function() {
+      window.addEventListener('click', func, false);
+    }, 10);
   }
 });
 

@@ -1,0 +1,128 @@
+extends layout
+
+block content
+  .pages
+    .outer.page#game-page
+      .info-container
+        .notification
+          .inner
+            span Message
+        .header
+          .inner
+            span.fa.fa-bars
+            span Menu
+            .page-title { model:name }
+            span.spacer
+            span.fa.fa-cog
+            span.user.fa.fa-user
+
+        .score-box
+          .inner
+            .time
+              .content
+                | { model:time | formatTime }
+            .left
+              .content
+                .score { model:scoreA }
+                .team { model:teamA }
+                .empty
+            .right
+              .content
+                .score { model:scoreB }
+                .team { model:teamB }
+                .empty
+        .time-box
+          .inner
+            .time { model:time | formatTime }
+            .quarter Q1
+      .boxes
+        .box.controls
+          .inner
+            .buttons
+              button#start-clock Start Clock
+              button#stop-clock Stop Clock
+              button#reset-clock Reset Clock
+              button#connect-bluetooth Connect Bluetooth
+              button(value=1, data-for='scoreA').increment#increment-teamA Increment Team A Score
+              button(value=-1, data-for='scoreA').increment#decrement-teamA Decrement Team A Score
+              button(value=1, data-for='scoreB').increment#increment-teamB Increment Team B Score
+              button(value=-1, data-for='scoreB').increment#decrement-teamB Decrement Team B Score
+
+            label(for='game-name') Game Name
+            input#game-name(rv-value='model:name')
+            label(for='teamA-name') Team A Name
+            input#teamA-name(rv-value='model:teamA')
+            label(for='teamA-score') Team A Score
+            input#teamA-score(rv-value='model:scoreA')
+            label(for='teamB-name') Team B Name
+            input#teamB-name(rv-value='model:teamB')
+            label(for='teamB-score') Team B Score
+            input#teamB-score(rv-value='model:scoreB')
+
+        .box.transactions-box
+          .inner
+            .transactions
+              .navigation
+                span transactions
+                .spacer
+                label.dropdown
+                  span sort
+                  span.fa.fa-angle-down
+              .list
+                .list-item.transaction
+                  .name Transaction
+                  .spacer
+                  .time 3 minutes ago
+                .list-item.transaction
+                  .name Transaction
+                  .spacer
+                  .time 3 minutes ago
+                .list-item.transaction
+                  .name Transaction
+                  .spacer
+                  .time 3 minutes ago
+                .list-item.transaction
+                  .name Transaction
+                  .spacer
+                  .time 3 minutes ago
+
+        .box.game-statistics
+          .inner
+
+        .box.teams-box
+          .inner
+            .teams
+              .navigation
+                span teams
+                .spacer
+
+              .team
+                .list-title Team 1
+                .list
+                  .list-item.player
+                    .name Sam Zagrobelny
+                  .list-item.player
+                    .name Sam Zagrobelny
+                  .list-item.player
+                    .name Sam Zagrobelny
+              .team
+                .list-title Team 2
+                .list
+                  .list-item.player
+                    .name Sam Zagrobelny
+                  .list-item.player
+                    .name Sam Zagrobelny
+                  .list-item.player
+                    .name Sam Zagrobelny
+
+
+  .templates
+    template#transaction-template
+      .list-item.transaction
+        .name Transaction
+        .spacer
+        .time 3 minutes ago
+
+    template#player-template
+      .list-item.player
+        .name Sam Zagrobelny

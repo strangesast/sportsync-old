@@ -1,12 +1,3 @@
-window.addEventListener('scroll', function(e) {
-  var s = window.scrollY;
-  if(s > 180) {
-    document.querySelector('.pages').classList.add('active');
-  } else {
-    document.querySelector('.pages').classList.remove('active');
-  }
-});
-
 document.querySelector('.fa-bars').addEventListener('click', function() {
   if(!document.querySelector('.dropdown').classList.contains('active')) {
     document.querySelector('.dropdown').classList.add('active');

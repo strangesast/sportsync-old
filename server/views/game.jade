@@ -1,0 +1,64 @@
+// score top, player, team, game statistics
+extends layout
+
+block content
+  .pages#game-page
+    .page
+      .container
+        .box
+          .buttons
+            button#start-clock Start Clock
+            button#stop-clock Stop Clock
+            button#reset-clock Reset Clock
+            button#connect-bluetooth Connect Bluetooth
+            button(value=1, data-for='scoreA').increment#increment-teamA Increment Team A Score
+            button(value=-1, data-for='scoreA').increment#decrement-teamA Decrement Team A Score
+            button(value=1, data-for='scoreB').increment#increment-teamB Increment Team B Score
+            button(value=-1, data-for='scoreB').increment#decrement-teamB Decrement Team B Score
+
+          div
+            label(for='game-name') Game Name
+            input#game-name(rv-value='model:name')
+          div
+            label(for='teamA-name') Team A Name
+            input#teamA-name(rv-value='model:teamA')
+          div
+            label(for='teamA-score') Team A Score
+            input#teamA-score(rv-value='model:scoreA')
+          div
+            label(for='teamB-name') Team B Name
+            input#teamB-name(rv-value='model:teamB')
+          div
+            label(for='teamB-score') Team B Score
+            input#teamB-score(rv-value='model:scoreB')
+
+      .container
+        .box.list
+          h1 List title
+          .list-item
+            span List Item 1
+          .list-item
+            span List Item 2
+          .list-item
+            span List Item 3
+          .list-item
+            span List Item 4
+          .list-item
+            span List Item 5
+
+    .header-container
+      include header
+      .box.wide.window.score
+        .left
+          .content
+            span
+              | { model:scoreA }
+        .right
+          .content
+            span
+              | { model:scoreB }
+      .box.time
+        .container
+          .spacer
+          span { model:time | formatTime }
+          .spacer

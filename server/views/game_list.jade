@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  .pages.header-only
+    .page
+      .box.wide.window.short.right
+        .left
+          .content
+            span Game List
+        .right
+          .content
+      .container
+        .box.list
+          .list-item.game
+            span Game 1
+          .list-item.game
+            span Game 2
+          .list-item.game
+            span Game 3
+          .list-item.game
+            span Game 4
+          .list-item.game
+            span Game 5
+
+    .header-container
+      include header
+
+block scripts
+  script(src='/javascripts/static-game-list.js')
