@@ -76,13 +76,19 @@ body.full {
     display: none;
     position: absolute;
     min-width: 180px;
-    padding: 10px;
+    padding: 10px 0;
     padding-top: 100%;
     top: 0;
     left: 0;
     z-index: 10;
     .item {
       white-space: nowrap;
+      padding: 0 10px;
+      padding-bottom: 8px;
+      &:hover {
+        cursor: pointer;
+        background: lighten(@g12, 10%);
+      }
     }
   }
   &.active {
