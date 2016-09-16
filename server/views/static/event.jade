@@ -1,6 +1,21 @@
 // header, large image / background, game title, players, teams, details
-
 extends layout
 
 block content
-  h1 Event
+  .pages.header-only.header-transition
+    .page.event
+      .box.wide.window
+        .container
+          span body content
+      .box.time
+        .container
+          span title
+      .box.body
+        .container
+          span body
+
+    .header-container
+      include header
+
+block scripts
+  script(src='/javascripts/static-event.js')

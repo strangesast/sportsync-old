@@ -27,6 +27,16 @@ body {
 @g11: #A0A0A0;
 @g12: #B0B0B0;
 
+.hover-link {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
 .pages {
   height: 100%;
   margin-top: -1px;
@@ -38,12 +48,14 @@ body {
 }
 
 .pages .header-container {
+  background: @g12;
+}
+.pages .header-container {
   position: fixed;
   height: @header-height + @window-height + @time-height;
   width: 100%;
   top: 0;
   left: 0;
-  background: @g12;
   z-index: 10;
 }
 
@@ -61,6 +73,36 @@ body {
     padding-top: @header-height;
   }
 }
+.pages.header-transparent {
+  & > .header-container {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+.pages.header-transition {
+  & > .header-container {
+    background: rgba(0, 0, 0, 0);
+    .header {
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: @g8;
+        transform: translateY(-100%);
+      }
+    }
+  }
+  &.active {
+    .header:after {
+      transform: translateY(0);
+    }
+  }
+}
 .pages.short .page {
   padding-top: @header-height+@window-short-height;
 }
@@ -73,6 +115,22 @@ body {
 
 .header {
   height: @header-height;
+  font-size: 1.5em;
+  a, span {
+    padding: 8px;
+  }
+  span:hover {
+    cursor: pointer;
+  }
+  a {
+    .hover-link;
+  }
+  & > .container {
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 @sml: 400px;
@@ -218,6 +276,7 @@ body {
 }
 
 .box.body {
+  min-height:1500px;
 }
 
 .box > .left:before {
@@ -249,14 +308,23 @@ body {
   }
 }
 
-.page {
-  position: relative;
-  padding-top: 20px;
-  .container {
-    height: 100%;
+.page.event {
+  padding-top: 0 !important; // ehh
+
+  & > .window {
+    background: @g9;
   }
 }
 
-//*, * * {
-//  transition: width 0.5s ease, height 0.5s ease, padding 0.5s ease, transform 0.5s ease;
+//.page {
+//  position: relative;
+//  padding-top: 20px;
+//  .container {
+//    height: 100%;
+//  }
 //}
+
+*, * *, *:after {
+  //transition: width 0.5s ease, height 0.5s ease, padding 0.5s ease, transform 0.5s ease;
+  transition: transform 0.5s ease;
+}

@@ -7,10 +7,9 @@ block content
       .box.body
         .container
           span body content
+
     .header-container
-      .header
-        .container
-          span Header
+      include header
       .box.wide.window
         .left
           .content
@@ -21,3 +20,6 @@ block content
       .box.wide.time
         .container
           span time
+
+block scripts
+  script(src='/javascripts/static-game.js')

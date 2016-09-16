@@ -2,14 +2,11 @@
 extends layout
 
 block content
-  .pages.header-only
+  .pages.header-only.header-transparent
     .page
       .box.into
         .panel
           .container
             span body content
     .header-container
-      .header
-        .container
-          span Header
-
+      include header
