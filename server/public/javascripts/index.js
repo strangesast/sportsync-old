@@ -34,13 +34,9 @@ var GameView = PageView.extend({
     this.model.resetClock();
   },
   bluetoothclicked: function(e) {
-    getBluetoothDevice().then(function() {
-      return 'connection successful';
-    }).catch(function(err) {
-      return err;
-    }).then(function(val) {
-      alert(val);
-    });
+    resetBluetooth().then(function(ob) {;
+      this.model.bluetooth = ob;
+    }.bind(this));
   },
   incrementclicked: function(e) {
     var target = e.currentTarget;
@@ -82,6 +78,23 @@ var teamCollection = new TeamCollection();
 var playerCollection = new PlayerCollection();
 var gameCollection = new GameCollection();
 
+// global bluetooth server
+var bluetoothServer = null;
+
+var resetBluetooth = function() {
+  return getBluetoothDevice().then(function(server) {
+    bluetoothServer = server;
+    return getBluetoothServiceCharacteristic(server, serviceUuid, characteristicUuid).then(function(res) {
+      alert('connected!');
+      //return res;
+      return {server: bluetoothServer, service: res[0], characteristic: res[1]};
+    }).catch(function(err) {
+      alert('connection error!');
+      throw err || new Error('connection error');
+    });
+  });
+};
+
 var socketURL = 'ws:' + window.location.origin.slice(window.location.protocol.length) + '/sockets';
 var router = new Router({
   teams: new TeamCollection(),
@@ -92,7 +105,11 @@ var router = new Router({
 
 var gameModel = gameCollection.create({
   name: 'Test game'
+}, {
+  bluetoothServer: bluetoothServer
 });
+
+gameModel.websocket = router.socket; // ugly
 
 var gameView = new GameView({model: gameModel});
 gameView.render();

@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var settings = require('../config').settings;
 
 var objects = require('../resources/testObjects');
 var nextId = function(type) {
@@ -38,7 +39,7 @@ appRouter.get(['/:pageName?/', '/:pageName/:pageInstance?/*'], function(req, res
     }
   }
 
-  return res.render(pageName, {test: true});
+  return res.render(pageName, {test: true, settings: settings});
 });
 
 router.use('/app', appRouter);

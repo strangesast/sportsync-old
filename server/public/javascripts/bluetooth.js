@@ -10,7 +10,7 @@ var convert = function(uuidStr) {
   return arr.join('-');
 }
 
-var serviceUuids = [convert('13333333333333333333333333333337')];
+var serviceUuids = [serviceUuid];
 
 var filters = [
   {
@@ -23,7 +23,7 @@ var val;
 var begin, end;
 
 var getBluetoothDevice = function() {
-  if(navigator.bluetooth == null) throw new Error('bluetooth unsupported');
+  if(navigator.bluetooth == null) return Promise.reject(new Error('bluetooth unsupported'));
   return navigator.bluetooth.requestDevice({
     filters: filters
   }).then(function(device) {
@@ -31,9 +31,15 @@ var getBluetoothDevice = function() {
   });
 };
   
-var getBluetoothServiceCharacteristic = function(service, characteristicUuid) {
-  return server.getPrimaryService(service).then(function(service) {
-    return service.getCharacteristic(characteristic);
+var getBluetoothServiceCharacteristic = function(server, serviceUuid, characteristicUuid) {
+  // return service + optionally return characteristic
+  return server.getPrimaryService(serviceUuid).then(function(service) {
+    if(characteristicUuid != null) {
+      return service.getCharacteristic(characteristicUuid).then(function(characteristic){
+        return [service, characteristic];
+      });;
+    }
+    return [service];
   });
 };
   

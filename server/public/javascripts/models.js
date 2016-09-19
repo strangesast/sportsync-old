@@ -56,9 +56,17 @@ var GameModel = Backbone.Model.extend({
     teamB: 'Team BBBB'  // |
   },
   updateInterval: 100,
-  initialize: function() {
+  initialize: function(attrs, params) {
+    this.bluetooth = {server: params.bluetoothServer};
     this.blacklist = ['time']; // should not be here
     this.timeUpdateInterval = null;
+    // manually need to do this, for now
+    this.bind('change', function(e) {
+      if(e.changed && e.changed.time == null) { // need to check that this is the only thing changed
+        this.save();
+      }
+    });
+    this.writeValueTimeout = null;
   },
   // should really separate out the clock but for now...
   timeFormatter: function(duration) {
@@ -148,6 +156,38 @@ var GameModel = Backbone.Model.extend({
 
     // Proxy the call to the original save function
     return Backbone.Model.prototype.save.call(this, attrs, options);
+  },
+  sync: function(method, model, options) {
+    if(!this.bluetooth.server && !this.websocket) return;
+    switch(method) {
+      case 'create':
+        // send create over bluetooth
+        clearTimeout(this.writeValueTimeout);
+        this.writeValueTimeout = setTimeout(function() {
+          if(this.bluetooth != null && this.bluetooth.server != null) {
+            let encoder = new TextEncoder("utf-8");
+            // Add line feed + carriage return chars to text
+            let message = _.extend(this.toJSON(), {by: router.clientId, method: 'bt'});
+            let text = encoder.encode(JSON.stringify(message));
+
+            this.bluetooth.characteristic.writeValue(text).then(function() {
+              console.log('done writing...');
+            });
+
+            //this.bluetooth.characteristic.readValue().then(function(value) {
+            //  val = value;
+            //  end = Date.now();
+            //  var textDecoder = new TextDecoder('utf-8');
+            //  var text = textDecoder.decode(value);
+            //  console.log(text);
+            //});
+          }
+        }.bind(this), 100);
+        break;
+      default:
+        console.log(method);
+        console.error('unknown method');
+    }
   }
 });
 
@@ -180,6 +220,10 @@ var Router = Backbone.Router.extend({
       this[key] = value;
     }, this);
     Backbone.history.start({pushState: true});
+    if(attrs.socket != null) attrs.socket.addEventListener('message', function(e) {
+      return this.websocketMessage(e);
+    }.bind(this));
+    this.clientId = null;
   },
   routes: {
     'app/': 'index',
@@ -188,6 +232,25 @@ var Router = Backbone.Router.extend({
     'app/:objectType/new': 'objectNewPage',
     'app/:objectType/new/': 'objectNewPage',
     'app/:objectType/*path': 'objectDetailPage'
+  },
+  websocketMessage: function(e) {
+    var obj = JSON.parse(e.data);
+    switch(obj.type) {
+      case 'init':
+        this.clientId = obj.value;
+        break;
+
+      case 'update':
+        if(obj.value.by === router.clientId) return; // "i" sent it
+        var props = _.clone(obj.value);
+        delete props.by;
+        delete props.method;
+        gameModel.set(props);
+        break;
+
+      default:
+        console.error('unexpected or unknown message type', obj);
+    }
   },
   validateType: function(type) {
     var frag;

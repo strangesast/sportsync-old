@@ -62,3 +62,8 @@ block content
           .spacer
           span { model:time | formatTime }
           .spacer
+
+block scripts
+  script().
+    var serviceUuid = JSON.parse('!{JSON.stringify(settings.serviceUuid)}');
+    var characteristicUuid = JSON.parse('!{JSON.stringify(settings.characteristicUuid)}');
