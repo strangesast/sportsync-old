@@ -1,6 +1,6 @@
-Backbone.ajax = function() {
-  var args = Array.prototype.slice.call(arguments, 0);
-};
+//Backbone.ajax = function() {
+//  var args = Array.prototype.slice.call(arguments, 0);
+//};
 
 // pages
 //   game
@@ -27,7 +27,7 @@ var TeamModel = Backbone.Model.extend({
 });
 
 var TeamCollection = Backbone.Collection.extend({
-  url: '/teams',
+  url: '/api/teams',
   model: TeamModel
 });
 
@@ -40,7 +40,7 @@ var PlayerModel = Backbone.Model.extend({
 });
 
 var PlayerCollection = Backbone.Collection.extend({
-  url: '/players',
+  url: '/api/players',
   model: PlayerModel
 });
 
@@ -57,7 +57,8 @@ var GameModel = Backbone.Model.extend({
   },
   updateInterval: 100,
   initialize: function(attrs, params) {
-    this.bluetooth = {server: params.bluetoothServer};
+    params = params || {};
+    if(params.bluetoothServer != null) this.bluetooth = {server: params.bluetoothServer};
     this.blacklist = ['time']; // should not be here
     this.timeUpdateInterval = null;
     // manually need to do this, for now
@@ -143,56 +144,60 @@ var GameModel = Backbone.Model.extend({
     if(lastStart != null && lastStop == null) return true;
     return lastStart > lastStop; 
   },
-  save: function(attrs, options) {
-    options || (options = {});
-    attrs || (attrs = _.clone(this.attributes));
+  //save: function(attrs, options) {
+  //  options || (options = {});
+  //  attrs || (attrs = _.clone(this.attributes));
 
-    // Filter the data to send to the server
-    _.each(this.blacklist || [], function(key) {
-      delete attrs[key];
-    });
+  //  // Filter the data to send to the server
+  //  _.each(this.blacklist || [], function(key) {
+  //    delete attrs[key];
+  //  });
 
-    options.data = JSON.stringify(attrs);
+  //  options.data = JSON.stringify(attrs);
 
-    // Proxy the call to the original save function
-    return Backbone.Model.prototype.save.call(this, attrs, options);
-  },
-  sync: function(method, model, options) {
-    if(!this.bluetooth.server && !this.websocket) return;
-    switch(method) {
-      case 'create':
-        // send create over bluetooth
-        clearTimeout(this.writeValueTimeout);
-        this.writeValueTimeout = setTimeout(function() {
-          if(this.bluetooth != null && this.bluetooth.server != null) {
-            let encoder = new TextEncoder("utf-8");
-            // Add line feed + carriage return chars to text
-            let message = _.extend(this.toJSON(), {by: router.clientId, method: 'bt'});
-            let text = encoder.encode(JSON.stringify(message));
+  //  // Proxy the call to the original save function
+  //  return Backbone.Model.prototype.save.call(this, attrs, options);
+  //}//,
+  //sync: function(method, model, options) {
+  //  if((!this.bluetooth || !this.bluetooth.server) && !this.websocket) return;
+  //  switch(method) {
+  //    case 'create':
+  //      // send create over bluetooth
+  //      clearTimeout(this.writeValueTimeout);
+  //      this.writeValueTimeout = setTimeout(function() {
+  //        if(this.bluetooth != null && this.bluetooth.server != null) {
+  //          let encoder = new TextEncoder("utf-8");
+  //          // Add line feed + carriage return chars to text
+  //          let message = _.extend(this.toJSON(), {by: router.clientId, method: 'bt'});
+  //          let text = encoder.encode(JSON.stringify(message));
 
-            this.bluetooth.characteristic.writeValue(text).then(function() {
-              console.log('done writing...');
-            });
+  //          this.bluetooth.characteristic.writeValue(text).then(function() {
+  //            console.log('done writing...');
+  //          });
 
-            //this.bluetooth.characteristic.readValue().then(function(value) {
-            //  val = value;
-            //  end = Date.now();
-            //  var textDecoder = new TextDecoder('utf-8');
-            //  var text = textDecoder.decode(value);
-            //  console.log(text);
-            //});
-          }
-        }.bind(this), 100);
-        break;
-      default:
-        console.log(method);
-        console.error('unknown method');
-    }
+  //          //this.bluetooth.characteristic.readValue().then(function(value) {
+  //          //  val = value;
+  //          //  end = Date.now();
+  //          //  var textDecoder = new TextDecoder('utf-8');
+  //          //  var text = textDecoder.decode(value);
+  //          //  console.log(text);
+  //          //});
+  //        }
+  //      }.bind(this), 100);
+  //      break;
+  //    default:
+  //      console.log(method);
+  //      console.error('unknown method');
+  //  }
+  //}
+  sync: function (method, model, options) {
+    console.log(method, model, options);
+    return Backbone.sync.call(this, method, model, options);
   }
 });
 
 var GameCollection = Backbone.Collection.extend({
-  url: '/games',
+  url: '/api/games',
   model: GameModel
 });
 
@@ -208,7 +213,7 @@ var GameEventModel = Backbone.Model.extend({
   //},
 });
 var GameEventCollection = Backbone.Collection.extend({
-  url: '/transactions',
+  url: '/api/transactions',
   model: GameEventModel
 });
 

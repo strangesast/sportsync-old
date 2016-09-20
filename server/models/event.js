@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Types.ObjectId;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 var Mixed = mongoose.Types.Mixed;
 
 
@@ -15,6 +15,6 @@ var EventSchema = new Schema({
   }
 });
 
-var Event = mongoose.model('Event', EventSchema);
+var Event = mongoose.model('Event', EventSchema, 'components');
 
 module.exports = Event;

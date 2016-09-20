@@ -71,6 +71,9 @@ router.get('/static/:pageName?', function(req, res, next) {
   res.render('static/' + (req.params.pageName || 'index'));// || 'index');
 });
 
+router.get('/testing', function(req, res, next) {
+  res.render('testing');
+});
 
 
 module.exports = router;

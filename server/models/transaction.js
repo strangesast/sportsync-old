@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Types.ObjectId;
-var Mixed = mongoose.Types.Mixed;
-
+var ObjectId = mongoose.Schema.Types.ObjectId;
+var Mixed = mongoose.Schema.Types.Mixed;
 
 // Description: describes a change to an event or game (or anything else where
 // version tables are not suitable)

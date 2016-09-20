@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+
+    link(href='/components/mocha/mocha.css', rel='stylesheet')
+
+  body
+    h1 Testing
+
+    // backbone stuff
+    script(src='/components/jquery/dist/jquery.min.js')
+    script(src='/components/underscore/underscore-min.js')
+    script(src='/components/backbone/backbone-min.js')
+
+    // rivets stuff
+    script(src='/components/sightglass/index.js')
+    script(src='/components/rivets/dist/rivets.min.js')
+
+    #mocha
+    script(src='/components/expect.js/index.js')
+    script(src='/components/mocha/mocha.js')
+    
+    script().
+      mocha.setup('bdd')
+    
+    script(src='/javascripts/models.js')
+    script(src='/javascripts/test.js')
+    
+    script().
+      document.addEventListener('DOMContentLoaded', function(e) {
+        mocha.checkLeaks();
+        mocha.run();
+      });

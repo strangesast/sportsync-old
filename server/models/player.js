@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Types.ObjectId;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 var Mixed = mongoose.Types.Mixed;
 
 
@@ -13,6 +13,6 @@ var PlayerSchema = new Schema({
   }
 });
 
-var Player = mongoose.model('Player', PlayerSchema);
+var Player = mongoose.model('Player', PlayerSchema, 'components');
 
 module.exports = Player;
