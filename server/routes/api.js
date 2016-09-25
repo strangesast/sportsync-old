@@ -50,7 +50,8 @@ router.get('/', function(req, res, next) {
 router.post ('/scoreboardIf', function (req, res, next) {
   console.log ('processing scoreboardIf');
   var response = ["board 5", "board 6", "board 7"];
-  return res.json (response);
+  var response1 = JSON.stringify(response);
+  return res.end (response1);
 });
 
 router.route('/:type/:id?')

@@ -33,24 +33,28 @@ var BoardRequest = function () {
 
 function sendToScoreboard (message) {
         
-    var parser = document.createElement('a');
-    parser.href = document.baseURI;
-    var api_page = String.format ("http://{0}:{1}/api/scoreboardIf", parser.hostname, parser.port);
-//    var api_page = String.format ("http://{0}:{1}/api/actions", parser.hostname, parser.port);
- 
-    var Httpreq = new XMLHttpRequest(); // a new request
-    Httpreq.onreadystatechange = function() {
-        if (Httpreq.readyState == 4) {
-            var text = Httpreq.responseText;
-            var response = JSON.parse (text);
-            alert (text);
-        }
-    };
-    //last argument is true for asynchronous
-    Httpreq.open("POST",api_page,true);
-    Httpreq.setRequestHeader("Content-Type", "application/json");
-    var tmp = JSON.stringify(message);
-    Httpreq.send(tmp);         
+    return new Promise (function (resolve, reject) {
+        var text = null;
+        var response = null;
+        var parser = document.createElement('a');
+        parser.href = document.baseURI;
+        var api_page = String.format ("http://{0}:{1}/api/scoreboardIf", parser.hostname, parser.port);
+    //    var api_page = String.format ("http://{0}:{1}/api/actions", parser.hostname, parser.port);
+        var Httpreq = new XMLHttpRequest(); // a new request
+        Httpreq.onreadystatechange = function() {
+            if (Httpreq.readyState == 4) {
+                text = Httpreq.responseText;
+                response = JSON.parse (text);
+//                alert (response + response.length);
+                resolve (response);
+            }
+        };
+        //last argument is true for asynchronous
+        Httpreq.open("POST",api_page,true);
+        Httpreq.setRequestHeader("Content-Type", "application/json");
+        var tmp = JSON.stringify(message);
+        Httpreq.send(tmp);
+    });
 }
 
 function CreateBoardElement () {

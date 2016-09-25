@@ -115,14 +115,17 @@ var board_config_array = [
 
   openBoard: function(e) {
     if (!this.obj.init) {
-        var boardlist = getBoardList ();
-        this.obj.array = [];
-    
-        for (i=0; i<boardlist.length; i++) {
-            var board_item = {id: 0, name: boardlist[i]};
-            this.obj.array.push (board_item);
-        }
-        this.obj.init = true;
+        var theObject = this.obj;
+        getBoardList().then (function (boardlist) {
+//            alert ('then getBoardList' + boardlist + ' len=' + boardlist.length);
+            theObject.array = [];
+            for (i=0; i<boardlist.length; i++) {
+                var board_item = {id: 0, name: boardlist[i]};
+//                alert ('adding item  ' + boardlist[i]);
+                theObject.array.push (board_item);
+            }
+            theObject.init = true;
+        });
     }
   },
   render: function() {
@@ -250,6 +253,10 @@ function getBoardList () {
     var boardlist = ['board1', 'board2', 'board3'];
     var  request = new BoardRequest();
     request.request_type = BoardRequestType.BRT_QUERY;
-    boardlist = sendToScoreboard (request);
-    return boardlist;
+
+    return sendToScoreboard (request).then (function (list) {
+ //       boardlist = list;
+ //       alert ('getBoardList promise next  ' + list + ' len=' + list.length);
+        return list;
+    }); 
 }
