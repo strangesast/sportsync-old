@@ -13,6 +13,12 @@ var nextId = function(type) {
   return String(Math.max.apply(null, keys)+1);
 };
 
+if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
+
 router.get(['/', '/app$'], function(req, res, next) {
   res.redirect('/app/');
 });

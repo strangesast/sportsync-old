@@ -9,7 +9,7 @@ var debug = require('debug')('server:server');
 var http = require('http');
 var wsapp = require('../ws');
 var config = require('../config');
-var bluetooth = require('../bluetooth/bluetooth');
+//var bluetooth = require('../bluetooth/bluetooth');
 
 /**
  * Get port from environment and store in Express.
@@ -29,8 +29,8 @@ var server = http.createServer(app);
  */
 
 // bluetooth peripheral server (should be optional)
-bluetooth.listen();
-wsapp(server, bluetooth.services);
+// bluetooth.listen();
+//wsapp(server, bluetooth.services);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

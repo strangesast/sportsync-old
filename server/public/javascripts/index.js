@@ -74,6 +74,72 @@ var GameListView = Backbone.View.extend({
   }
 });
 
+var board_config_array = [
+  {
+    id: 1,
+    name: 'board config 1'
+  },
+  {
+    id: 2,
+    name: 'board config 2'
+  }
+];
+  var BoardSelectView = Backbone.View.extend({
+  el: '#active-board',
+  initialize: function(attrs) {
+//    alert ('init select');
+    var boardlist = ['board'];
+//    var boardlist = getBoardList ();
+    var board_config_array = [];
+
+    for (i=0; i<boardlist.length; i++) {
+        var board_item = {id: 0, name: boardlist[i]};
+        board_config_array.push (board_item);
+    }
+ //   var board_config_array = attrs.board_config_array;
+    // store "obj" in "this" so you access it later
+    this.obj = {
+      selected: 1,
+      init: false,
+      array: board_config_array
+    };
+    this.render(); // calling render here isn't always desirable, but works fine
+  },
+  events: {
+    "change select": "changeBoard",
+    "click select": "openBoard"
+  },
+  changeBoard: function(e) {
+//    alert ("change");
+  },
+
+  openBoard: function(e) {
+    if (!this.obj.init) {
+        var boardlist = getBoardList ();
+        this.obj.array = [];
+    
+        for (i=0; i<boardlist.length; i++) {
+            var board_item = {id: 0, name: boardlist[i]};
+            this.obj.array.push (board_item);
+        }
+        this.obj.init = true;
+    }
+  },
+  render: function() {
+    this.binding = this.binding || rivets.bind(this.el, { obj: this.obj});
+  },
+  remove: function() {
+    if(this.binding) this.binding.unbind(); // if you go to a different page or otherwise remove this page, need to unbind listeners
+  }
+});
+
+var boardSelectView = new BoardSelectView({board_config_array: board_config_array});
+//var boardSelectView = null;
+boardSelectView.obj.selected = 2; // dom should update to that new value
+
+  
+
+
 var teamCollection = new TeamCollection();
 var playerCollection = new PlayerCollection();
 var gameCollection = new GameCollection();
@@ -178,4 +244,12 @@ function loadBoard (){
   var tmp = JSON.stringify(command_data);
   Httpreq.send(tmp);         
  
+}
+
+function getBoardList () {
+    var boardlist = ['board1', 'board2', 'board3'];
+    var  request = new BoardRequest();
+    request.request_type = BoardRequestType.BRT_QUERY;
+    boardlist = sendToScoreboard (request);
+    return boardlist;
 }

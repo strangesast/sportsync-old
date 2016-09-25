@@ -47,6 +47,11 @@ router.get('/', function(req, res, next) {
   res.status(200);
   res.send();
 })
+router.post ('/scoreboardIf', function (req, res, next) {
+  console.log ('processing scoreboardIf');
+  var response = ["board 5", "board 6", "board 7"];
+  return res.json (response);
+});
 
 router.route('/:type/:id?')
 .get(function(req, res, next) {

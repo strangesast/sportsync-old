@@ -15,7 +15,6 @@ block content
             button(value=-1, data-for='scoreA').increment#decrement-teamA Decrement Team A Score
             button(value=1, data-for='scoreB').increment#increment-teamB Increment Team B Score
             button(value=-1, data-for='scoreB').increment#decrement-teamB Decrement Team B Score
-
           div
             label(for='game-name') Game Name
             input#game-name(rv-value='model:name')
@@ -64,6 +63,7 @@ block content
           .spacer
 
 block scripts
+  script(src='/javascripts/scoreboardIf.js')
   script().
     var serviceUuid = JSON.parse('!{JSON.stringify(settings.serviceUuid)}');
     var characteristicUuid = JSON.parse('!{JSON.stringify(settings.characteristicUuid)}');
