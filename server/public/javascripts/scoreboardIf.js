@@ -31,6 +31,16 @@ var BoardRequest = function () {
     this.timer_fraction_threshold = -1;
 }
 
+var BoardResponse = function() {
+    this.requestor = "";
+    this.request_type = BoardRequestType.BRT_VALUE;     //VALUE, CMD, or DATA
+    this.element_type = ElementTypes.ET_NONE;           //Element type involved: TEXTBOX, TIMER, RECT
+    this.uuid = "";
+    
+    this.query_result1 = [];
+    
+}
+
 function sendToScoreboard (message) {
         
     return new Promise (function (resolve, reject) {
@@ -57,18 +67,19 @@ function sendToScoreboard (message) {
     });
 }
 
-function CreateBoardElement () {
-    return new DLElement();
-}
-
-function CreateDLColor () {
-    return new DLColor();
-}
-
-function CreateXYInfo () {
-    return new XYInfo ();
-}
-
 function CreateBoardRequest () {
     return new BoardRequest();
 }
+function CreateBoardResponse () {
+    return new BoardResponse();
+}
+
+
+module.exports.ElementTypes = ElementTypes;
+module.exports.BoardRequestType = BoardRequestType;
+module.exports.BoardTimerCmd = BoardTimerCmd;
+module.exports.TimerDisplayMode = TimerDisplayMode;
+module.exports.TimerDisplayMode = TimerDisplayMode;
+module.exports.TimerPrecision = TimerPrecision;
+module.exports.BoardRequest = CreateBoardRequest;
+module.exports.BoardResponse = BoardResponse;

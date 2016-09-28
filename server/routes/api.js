@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var scoreboardapi = require('../resources/scoreboardAPI');
+//var scoreboardapi = require('../resources/scoreboardAPI');
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -48,10 +48,14 @@ router.get('/', function(req, res, next) {
   res.send();
 })
 router.post ('/scoreboardIf', function (req, res, next) {
-  console.log ('processing scoreboardIf');
+  console.log ('processing scoreboardIf request=' + req.body.request_type);
   var response = ["board 5", "board 6", "board 7"];
   var response1 = JSON.stringify(response);
-  return res.end (response1);
+  console.log ('test1');
+  global.scoreboard_api.scoreboardMsgSync('INFO', req.body, res);
+  console.log ('test2');
+  console.log ('processed api');
+//  return res.end (response1);
 });
 
 router.route('/:type/:id?')

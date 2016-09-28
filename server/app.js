@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var config = require('./config');
 
 var routes = require('./routes/index');
-var scoreboard_api = require ('./resources/scoreboardAPI');
+global.scoreboard_api = require ('./resources/scoreboardAPI');
 var apiroutes = require('./routes/api');
 
 var app = express();
@@ -63,6 +63,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-scoreboard_api.init(config.SCOREBOARD_API_PORT);
+global.scoreboard_api.init(config.SCOREBOARD_API_PORT);
 
 module.exports = app;
