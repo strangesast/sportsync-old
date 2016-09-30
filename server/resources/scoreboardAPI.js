@@ -1,7 +1,33 @@
 // Load requirements
 var http = require('http'),
     io = require('socket.io');
-    
+var uuid = require('node-uuid');
+
+var callback_list = [];
+function callbackRegister (msg, callback) {
+  var id = uuid.v4();
+  msg.conversation_guid = id;
+  var item = {id: id, callback:callback};
+  callback_list.push(item);
+  return id;
+}
+
+function callbackPostresponse (msg) {
+  if (msg.request.conversation_guid === undefined) {
+    return;
+  }
+  //locate the ID
+  for (i=0; i<callback_list.length; i++) {
+    if (callback_list[i].id == msg.request.conversation_guid) {
+      console.log ('calling subscriber callback - id ' + callback_list[i].id +  'msg: ' + msg);
+      var response = JSON.stringify (msg.response_data);
+      callback_list[i].callback.end (response);
+      break;
+    }
+  }
+}
+
+   
 var subscriber_callback = null;
 
 function init (port) {
@@ -29,12 +55,16 @@ function init (port) {
     });
     socket.on('INFO', function (msg) {
 
-    console.log('MSG ', msg);
+    console.log('INFO ', msg);
+    
+    callbackPostresponse(msg);
+  /*
     if (subscriber_callback) {
       console.log ('calling subscriber callback - msg: ', msg);
       var response = JSON.stringify (msg);
       subscriber_callback.end (response);
     }
+    */
   
     // send it back
     //io.sockets.in('client1').emit('CH01', {boardname: 'board4', field2: 'test msg'});
@@ -65,9 +95,11 @@ function scoreboardMsg (channel, msg) {
 
 function scoreboardMsgSync (channel, msg, callback) {
   console.log ("requesting to load board ", msg.request_type);
+  callbackRegister (msg, callback);
+  console.log ("test 3");
 
   io.sockets.in('client1').emit(channel, msg);
-   subscriber_callback = callback;
+//   subscriber_callback = callback;
  
 }
 
