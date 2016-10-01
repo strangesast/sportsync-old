@@ -49,8 +49,8 @@ router.get('/', function(req, res, next) {
 })
 router.post ('/scoreboardIf', function (req, res, next) {
   console.log ('processing scoreboardIf request=' + req.body.request_type);
-  var response = ["board 5", "board 6", "board 7"];
-  var response1 = JSON.stringify(response);
+//  var response = ["board 5", "board 6", "board 7"];
+//  var response1 = JSON.stringify(response);
   console.log ('test1');
   global.scoreboard_api.scoreboardMsgSync('INFO', req.body, res);
   console.log ('test2');

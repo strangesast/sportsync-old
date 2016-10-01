@@ -110,7 +110,11 @@ var board_config_array = [
     "click select": "openBoard"
   },
   changeBoard: function(e) {
-//    alert ("change");
+    //request the selected board to load
+    var target = e.currentTarget;
+    var value = target.options[target.selectedIndex].innerText;
+    loadBoard (value);
+//    alert ('selected ' + value);
   },
 
   openBoard: function(e) {
@@ -226,7 +230,7 @@ if (!String.format) {
   };
 }
 
-function loadBoard (){
+function loadBoard_old (){
   var parser = document.createElement('a');
   parser.href = document.baseURI;
   var api_page = String.format ("http://{0}:{1}/api/loadboard", parser.hostname, parser.port);
@@ -258,5 +262,17 @@ function getBoardList () {
  //       boardlist = list;
  //       alert ('getBoardList promise next  ' + list + ' len=' + list.length);
         return list;
+    }); 
+}
+function loadBoard (board_name) {
+    var  request = new BoardRequest();
+    request.request_type = BoardRequestType.BRT_DISPLAY_CMD;
+    request.cmd = BoardDisplayCmd.BDC_LOAD;
+    request.board_name = board_name;
+
+    return sendToScoreboard (request).then (function (status) {
+ //       boardlist = list;
+ //       alert ('getBoardList promise next  ' + list + ' len=' + list.length);
+        return status;
     }); 
 }

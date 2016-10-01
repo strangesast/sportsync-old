@@ -2,7 +2,8 @@ var ElementTypes = Object.freeze ({ET_NONE:0,
                                   ET_RECT:101,
                                   ET_TEXTBOX:110,
                                   ET_TIMER:111});
-var BoardRequestType = Object.freeze ({BRT_NONE:0, BRT_VALUE:1, BRT_CMD:2, BRT_DATA:3, BRT_QUERY:4});
+var BoardRequestType = Object.freeze ({BRT_NONE:0, BRT_VALUE:1, BRT_DATA:3, BRT_QUERY:4, BRT_ELEMENT_CMD:10, BRT_DISPLAY_CMD:11});
+var BoardDisplayCmd = Object.freeze ({BDC_NONE:0, BDC_LOAD:1, BDC_SELECT_ACTIVE:2, BDC_CONFIG:3});
 var BoardTimerCmd = Object.freeze ({TIMER_NO_CMD:0, TIMER_SET:1, TIMER_START:2, TIMER_PAUSE:3, TIMER_STOP:4, TIMER_RESET:5, TIMER_CLEAR:6});
 var TimerDisplayMode = Object.freeze ({DM_NONE:0, DM_HHMMSS:1, DM_MMSS:2});
 var TimerPrecision = Object.freeze ({TP_NONE:0, TP_SECONDS:1, TP_TENTHS:2, TP_HUNDREDTHS:3});
@@ -17,6 +18,12 @@ var BoardRequest = function () {
     //case of request_type == BRT_VALUE
     this.value_type = 'TEXT';                           //the type of the value: text, date
     this.value = "";                                    //Text value
+    //fields applying to commands
+    this.cmd = 0;
+    //fields applying to display command
+    this.board_name = '';
+    this.board_pos = null;
+    this.visible = true;
     
     //fields applying to query
     this.query_name = "";
@@ -77,6 +84,7 @@ function CreateBoardResponse () {
 
 module.exports.ElementTypes = ElementTypes;
 module.exports.BoardRequestType = BoardRequestType;
+module.exports.BoardDisplayCmd = BoardDisplayCmd;
 module.exports.BoardTimerCmd = BoardTimerCmd;
 module.exports.TimerDisplayMode = TimerDisplayMode;
 module.exports.TimerDisplayMode = TimerDisplayMode;

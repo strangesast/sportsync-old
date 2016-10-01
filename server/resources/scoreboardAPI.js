@@ -94,7 +94,7 @@ function scoreboardMsg (channel, msg) {
 }
 
 function scoreboardMsgSync (channel, msg, callback) {
-  console.log ("requesting to load board ", msg.request_type);
+  console.log ("request to board ", msg.request_type);
   callbackRegister (msg, callback);
   console.log ("test 3");
 
