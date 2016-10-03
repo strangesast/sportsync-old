@@ -26,12 +26,15 @@ var GameView = PageView.extend({
   },
   startclicked: function(e) {
     this.model.startClock();
+    scoreboardCmd (BoardElementCmd.TIMER_START);
+    startClock();
   },
   stopclicked: function(e) {
     this.model.stopClock();
+    scoreboardCmd (BoardElementCmd.TIMER_STOP);
   },
   resetclicked: function(e) {
-    this.model.resetClock();
+    scoreboardCmd (BoardElementCmd.TIMER_STOP);
   },
   bluetoothclicked: function(e) {
     resetBluetooth().then(function(ob) {;
@@ -269,6 +272,17 @@ function loadBoard (board_name) {
     request.request_type = BoardRequestType.BRT_DISPLAY_CMD;
     request.cmd = BoardDisplayCmd.BDC_LOAD;
     request.board_name = board_name;
+
+    return sendToScoreboard (request).then (function (status) {
+ //       boardlist = list;
+ //       alert ('getBoardList promise next  ' + list + ' len=' + list.length);
+        return status;
+    }); 
+}
+function scoreboardCmd (cmd, param) {
+    var  request = new BoardRequest();
+    request.request_type = BoardRequestType.BRT_ELEMENT_CMD;
+    request.cmd = cmd;
 
     return sendToScoreboard (request).then (function (status) {
  //       boardlist = list;
