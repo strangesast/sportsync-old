@@ -34,7 +34,7 @@ var GameView = PageView.extend({
     scoreboardCmd (BoardElementCmd.TIMER_STOP);
   },
   resetclicked: function(e) {
-    scoreboardCmd (BoardElementCmd.TIMER_STOP);
+    scoreboardCmd (BoardElementCmd.TIMER_SET);
   },
   bluetoothclicked: function(e) {
     resetBluetooth().then(function(ob) {;
