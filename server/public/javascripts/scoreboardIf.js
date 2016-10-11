@@ -30,10 +30,15 @@ var BoardRequest = function () {
     this.query_name = "";
     this.query_qualifier1 = "";
     this.query_qualifier2 = "";
+    
+    //parameters to accompany the command
+    this.param1 = "";
+    this.param2 = "";
 
     //case of request_type == BRT_CMD and element_type == ET_TIMER
-    this.element_request = BoardElementCmd.ELEMENT_NO_CMD;
+//    this.element_request = BoardElementCmd.ELEMENT_NO_CMD;
     this.element_name = "";
+    this.element_value = "";
     this.timer_ticks = -1;
     this.timer_display_mode = TimerDisplayMode.DM_NONE;
     this.timer_precision = TimerPrecision.TP_NONE;

@@ -45,7 +45,11 @@ var GameView = PageView.extend({
     var target = e.currentTarget;
     var f = target.getAttribute('data-for');
     var v = Number(target.value);
-    this.model.set(f, Math.max(this.model.get(f) + v, 0));
+    var value = Math.max(this.model.get(f) + v, 0);
+    this.model.set(f, value);
+//    alert ('click ' + f);
+//    scoreboardCmd (BoardElementCmd.SCORE_SET, 'Home Score', value);
+    scoreboardCmd (BoardElementCmd.SCORE_SET, f, value);
   },
   watchClock: function(timestamp) {
     // 'this' is model
@@ -279,10 +283,13 @@ function loadBoard (board_name) {
         return status;
     }); 
 }
-function scoreboardCmd (cmd, param) {
+function scoreboardCmd (cmd, element_name, element_value) {
     var  request = new BoardRequest();
+    request.cmd = cmd;
     request.request_type = BoardRequestType.BRT_ELEMENT_CMD;
     request.cmd = cmd;
+    request.element_name = element_name;
+    request.element_value = element_value;
 
     return sendToScoreboard (request).then (function (status) {
  //       boardlist = list;
