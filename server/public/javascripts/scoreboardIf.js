@@ -4,7 +4,7 @@ var ElementTypes = Object.freeze ({ET_NONE:0,
                                   ET_TIMER:111});
 var BoardRequestType = Object.freeze ({BRT_NONE:0, BRT_VALUE:1, BRT_DATA:3, BRT_QUERY:4, BRT_ELEMENT_CMD:10, BRT_DISPLAY_CMD:11});
 var BoardDisplayCmd = Object.freeze ({BDC_NONE:0, BDC_LOAD:1, BDC_SELECT_ACTIVE:2, BDC_CONFIG:3});
-var BoardElementCmd = Object.freeze ({ELEMENT_NO_CMD:0, TIMER_SET:10, TIMER_START:11, TIMER_PAUSE:12, TIMER_STOP:13, TIMER_RESET:14, TIMER_CLEAR:15,
+var BoardElementCmd = Object.freeze ({ELEMENT_NO_CMD:0, ELEMENT_SET:1, TIMER_SET:10, TIMER_START:11, TIMER_PAUSE:12, TIMER_STOP:13, TIMER_RESET:14, TIMER_CLEAR:15,
                                      SCORE_SET:20, SCORE_CLEAR:21, SCORE_INCREMENT:22, SCORE_DECREMENT:23});
 var TimerDisplayMode = Object.freeze ({DM_NONE:0, DM_HHMMSS:1, DM_MMSS:2});
 var TimerPrecision = Object.freeze ({TP_NONE:0, TP_SECONDS:1, TP_TENTHS:2, TP_HUNDREDTHS:3});

@@ -22,7 +22,9 @@ var GameView = PageView.extend({
     'click #stop-clock': 'stopclicked',
     'click #reset-clock': 'resetclicked',
     'click #connect-bluetooth': 'bluetoothclicked',
-    'click button.increment': 'incrementclicked'
+    'click button.increment': 'incrementclicked',
+    'change #teamA-name': 'teamName',
+    'change #teamB-name': 'teamName'
   },
   startclicked: function(e) {
     this.model.startClock();
@@ -64,6 +66,12 @@ var GameView = PageView.extend({
       clearInterval(this.timeUpdateInterval);
       this.timeUpdateInterval = null;
     }
+  },
+  teamName: function (e) {
+//    alert ('change team name');
+    var target = e.currentTarget;
+    var f = target.getAttribute('data-for');
+    scoreboardCmd (BoardElementCmd.ELEMENT_SET, f, target.value);
   },
   render: function() {
     this.binding = this.binding || rivets.bind(this.el, { model: this.model, view: this});

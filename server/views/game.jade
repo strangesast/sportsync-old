@@ -20,13 +20,13 @@ block content
             input#game-name(rv-value='model:name')
           div
             label(for='teamA-name') Team A Name
-            input#teamA-name(rv-value='model:teamA')
+            input#teamA-name(rv-value='model:teamA', data-for='teamA')
           div
             label(for='teamA-score') Team A Score
             input#teamA-score(rv-value='model:scoreA')
           div
             label(for='teamB-name') Team B Name
-            input#teamB-name(rv-value='model:teamB')
+            input#teamB-name(rv-value='model:teamB', data-for='teamB')
           div
             label(for='teamB-score') Team B Score
             input#teamB-score(rv-value='model:scoreB')
